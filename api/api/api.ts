@@ -25,6 +25,7 @@ import type {
   EmailTokenObtain,
   PatchedUser,
   TokenRefresh,
+  TrendingShowsResponse,
   User,
   UserRegistration,
 } from "../baseAppBackendAPI.schemas";
@@ -290,6 +291,579 @@ export const useApiAuthRegisterCreate = <
 
   return useMutation(mutationOptions);
 };
+export const apiShowsRetrieve = (signal?: AbortSignal) => {
+  return customAxios<void>({ url: `/api/shows/`, method: "GET", signal });
+};
+
+export const getApiShowsRetrieveQueryKey = () => {
+  return [`/api/shows/`] as const;
+};
+
+export const getApiShowsRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof apiShowsRetrieve>>, TError, TData>
+  >;
+}) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getApiShowsRetrieveQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiShowsRetrieve>>
+  > = ({ signal }) => apiShowsRetrieve(signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiShowsRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiShowsRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsRetrieve>>
+>;
+export type ApiShowsRetrieveQueryError = unknown;
+
+export function useApiShowsRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsRetrieve>>,
+  TError = unknown,
+>(options: {
+  query: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof apiShowsRetrieve>>, TError, TData>
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof apiShowsRetrieve>>,
+        TError,
+        TData
+      >,
+      "initialData"
+    >;
+}): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiShowsRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof apiShowsRetrieve>>, TError, TData>
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof apiShowsRetrieve>>,
+        TError,
+        TData
+      >,
+      "initialData"
+    >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiShowsRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof apiShowsRetrieve>>, TError, TData>
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiShowsRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof apiShowsRetrieve>>, TError, TData>
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowsRetrieveQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const apiShowsCreate = (signal?: AbortSignal) => {
+  return customAxios<void>({ url: `/api/shows/`, method: "POST", signal });
+};
+
+export const getApiShowsCreateMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsCreate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, void, TContext>;
+}) => {
+  const mutationKey = ["apiShowsCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiShowsCreate>>,
+    void
+  > = () => {
+    return apiShowsCreate();
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    void,
+    TContext
+  >;
+};
+
+export type ApiShowsCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsCreate>>
+>;
+
+export type ApiShowsCreateMutationError = unknown;
+
+export const useApiShowsCreate = <
+  TData = Awaited<ReturnType<typeof apiShowsCreate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, void, TContext>;
+}): UseMutationResult<TData, TError, void, TContext> => {
+  const mutationOptions = getApiShowsCreateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiShowsRetrieve2 = (id: string, signal?: AbortSignal) => {
+  return customAxios<void>({ url: `/api/shows/${id}/`, method: "GET", signal });
+};
+
+export const getApiShowsRetrieve2QueryKey = (id: string) => {
+  return [`/api/shows/${id}/`] as const;
+};
+
+export const getApiShowsRetrieve2QueryOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getApiShowsRetrieve2QueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiShowsRetrieve2>>
+  > = ({ signal }) => apiShowsRetrieve2(id, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiShowsRetrieve2QueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsRetrieve2>>
+>;
+export type ApiShowsRetrieve2QueryError = unknown;
+
+export function useApiShowsRetrieve2<
+  TData = Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+  TError = unknown,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiShowsRetrieve2<
+  TData = Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiShowsRetrieve2<
+  TData = Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiShowsRetrieve2<
+  TData = Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsRetrieve2>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowsRetrieve2QueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const apiShowsUpdate = (id: string) => {
+  return customAxios<void>({ url: `/api/shows/${id}/`, method: "PUT" });
+};
+
+export const getApiShowsUpdateMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}) => {
+  const mutationKey = ["apiShowsUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiShowsUpdate>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return apiShowsUpdate(id);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { id: string },
+    TContext
+  >;
+};
+
+export type ApiShowsUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsUpdate>>
+>;
+
+export type ApiShowsUpdateMutationError = unknown;
+
+export const useApiShowsUpdate = <
+  TData = Awaited<ReturnType<typeof apiShowsUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}): UseMutationResult<TData, TError, { id: string }, TContext> => {
+  const mutationOptions = getApiShowsUpdateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiShowsPartialUpdate = (id: string) => {
+  return customAxios<void>({ url: `/api/shows/${id}/`, method: "PATCH" });
+};
+
+export const getApiShowsPartialUpdateMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsPartialUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}) => {
+  const mutationKey = ["apiShowsPartialUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiShowsPartialUpdate>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return apiShowsPartialUpdate(id);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { id: string },
+    TContext
+  >;
+};
+
+export type ApiShowsPartialUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsPartialUpdate>>
+>;
+
+export type ApiShowsPartialUpdateMutationError = unknown;
+
+export const useApiShowsPartialUpdate = <
+  TData = Awaited<ReturnType<typeof apiShowsPartialUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}): UseMutationResult<TData, TError, { id: string }, TContext> => {
+  const mutationOptions = getApiShowsPartialUpdateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiShowsDestroy = (id: string) => {
+  return customAxios<void>({ url: `/api/shows/${id}/`, method: "DELETE" });
+};
+
+export const getApiShowsDestroyMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsDestroy>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}) => {
+  const mutationKey = ["apiShowsDestroy"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiShowsDestroy>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return apiShowsDestroy(id);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { id: string },
+    TContext
+  >;
+};
+
+export type ApiShowsDestroyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsDestroy>>
+>;
+
+export type ApiShowsDestroyMutationError = unknown;
+
+export const useApiShowsDestroy = <
+  TData = Awaited<ReturnType<typeof apiShowsDestroy>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}): UseMutationResult<TData, TError, { id: string }, TContext> => {
+  const mutationOptions = getApiShowsDestroyMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiShowsTrendingRetrieve = (signal?: AbortSignal) => {
+  return customAxios<TrendingShowsResponse>({
+    url: `/api/shows/trending/`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getApiShowsTrendingRetrieveQueryKey = () => {
+  return [`/api/shows/trending/`] as const;
+};
+
+export const getApiShowsTrendingRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+      TError,
+      TData
+    >
+  >;
+}) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getApiShowsTrendingRetrieveQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>
+  > = ({ signal }) => apiShowsTrendingRetrieve(signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiShowsTrendingRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>
+>;
+export type ApiShowsTrendingRetrieveQueryError = unknown;
+
+export function useApiShowsTrendingRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+  TError = unknown,
+>(options: {
+  query: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+        TError,
+        TData
+      >,
+      "initialData"
+    >;
+}): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiShowsTrendingRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+        TError,
+        TData
+      >,
+      "initialData"
+    >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiShowsTrendingRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+      TError,
+      TData
+    >
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiShowsTrendingRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+      TError,
+      TData
+    >
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowsTrendingRetrieveQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
 export const apiUsersList = (signal?: AbortSignal) => {
   return customAxios<User[]>({ url: `/api/users/`, method: "GET", signal });
 };

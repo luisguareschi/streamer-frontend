@@ -31,6 +31,37 @@ export interface User {
   email?: string;
 }
 
+export interface TrendingShow {
+  id: number;
+  /** @nullable */
+  backdrop_path: string | null;
+  /** @nullable */
+  poster_path: string | null;
+  overview: string;
+  media_type: MediaTypeEnum;
+  adult: boolean;
+  original_language: string;
+  genre_ids: number[];
+  popularity: number;
+  vote_average: number;
+  vote_count: number;
+  title?: string;
+  original_title?: string;
+  release_date?: string;
+  video?: boolean;
+  name?: string;
+  original_name?: string;
+  first_air_date?: string;
+  origin_country?: string[];
+}
+
+export interface TrendingShowsResponse {
+  results: TrendingShow[];
+  page: number;
+  total_pages: number;
+  total_results: number;
+}
+
 export interface TokenRefresh {
   readonly access: string;
   refresh: string;
@@ -48,6 +79,14 @@ export interface PatchedUser {
   email?: string;
 }
 
+/**
+ * * `tv` - tv
+ * `movie` - movie
+ */
+export enum MediaTypeEnum {
+  tv = "tv",
+  movie = "movie",
+}
 export interface EmailTokenObtain {
   email: string;
   password: string;
