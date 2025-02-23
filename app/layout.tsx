@@ -10,8 +10,12 @@ const font = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "BaseApp",
-  description: "A next js template for building apps",
+  title: "Streamer",
+  description: "Watch your favorite TV shows and movies, all in one place.",
+};
+
+export const viewport = {
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -19,7 +23,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={font.className}>
+      <body className={`${font.className} bg-black`}>
         <Providers>
           {children}
           <Toaster />
