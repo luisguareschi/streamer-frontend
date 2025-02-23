@@ -1,18 +1,19 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import useLogin from "@/queries/auth/useLogin";
 import Spinner from "@/components/common/spinner";
 import useSignUp from "@/queries/auth/useSignUp";
 
 const LoginPage = () => {
   const router = useRouter();
-  const [showLogin, setShowLogin] = useState(true);
+  const searchParams = useSearchParams();
+  const showLogin = !(searchParams.get("signup") === "true");
   const { mutate: signUp, isPending: loadingSignUp } = useSignUp({
     onSuccess: () => {
-      setShowLogin(true);
+      router.push("login");
     },
   });
   const { mutate: login, isPending: loadingLogin } = useLogin({
@@ -121,7 +122,9 @@ const LoginPage = () => {
           variant="link"
           size="sm"
           className="font-bold text-white underline text-base"
-          onClick={() => setShowLogin(!showLogin)}
+          onClick={() => {
+            router.push(`/login?signup=${showLogin}`);
+          }}
         >
           {showLogin ? "Sign up" : "Login"}
         </Button>

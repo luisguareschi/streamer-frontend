@@ -12,7 +12,7 @@ export default function Main() {
   }
 
   if (!isLoading && !user) {
-    router.replace("/login");
+    router.replace("/welcome");
   }
 
   return <FullScreenLoading />;

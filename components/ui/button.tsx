@@ -22,6 +22,8 @@ const buttonVariants = cva(
         link: "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
         roundedWhite:
           "bg-white text-gray-900 font-semibold active:bg-gray-200/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90 rounded-full",
+        roundedBorder:
+          "bg-transparent border border-white text-white font-semibold active:bg-gray-800/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90 rounded-full",
       },
       size: {
         default: "h-10 px-4 py-2",
