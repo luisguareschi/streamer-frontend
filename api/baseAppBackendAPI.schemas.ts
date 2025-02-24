@@ -7,6 +7,13 @@
  * API para el sistema de BaseApp Backend
  */
 
+export type ApiShowsSearchRetrieveParams = {
+  /**
+   * Query string
+   */
+  query: string;
+};
+
 export interface UserRegistration {
   /**
    * Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
@@ -29,6 +36,68 @@ export interface User {
   username: string;
   /** @maxLength 254 */
   email?: string;
+}
+
+export type TvDetailSpokenLanguagesItem = { [key: string]: unknown };
+
+export type TvDetailSeasonsItem = { [key: string]: unknown };
+
+export type TvDetailProductionCountriesItem = { [key: string]: unknown };
+
+export type TvDetailProductionCompaniesItem = { [key: string]: unknown };
+
+export type TvDetailNetworksItem = { [key: string]: unknown };
+
+/**
+ * @nullable
+ */
+export type TvDetailNextEpisodeToAir = { [key: string]: unknown } | null;
+
+/**
+ * @nullable
+ */
+export type TvDetailLastEpisodeToAir = { [key: string]: unknown } | null;
+
+export type TvDetailCreatedByItem = { [key: string]: unknown };
+
+export interface TvDetail {
+  adult: boolean;
+  /** @nullable */
+  backdrop_path: string | null;
+  created_by: TvDetailCreatedByItem[];
+  episode_run_time: number[];
+  first_air_date: string;
+  genres: Genre[];
+  /** @nullable */
+  homepage: string | null;
+  id: number;
+  in_production: boolean;
+  languages: string[];
+  last_air_date: string;
+  /** @nullable */
+  last_episode_to_air: TvDetailLastEpisodeToAir;
+  name: string;
+  /** @nullable */
+  next_episode_to_air: TvDetailNextEpisodeToAir;
+  networks: TvDetailNetworksItem[];
+  number_of_episodes: number;
+  number_of_seasons: number;
+  origin_country: string[];
+  original_language: string;
+  original_name: string;
+  overview: string;
+  popularity: number;
+  /** @nullable */
+  poster_path: string | null;
+  production_companies: TvDetailProductionCompaniesItem[];
+  production_countries: TvDetailProductionCountriesItem[];
+  seasons: TvDetailSeasonsItem[];
+  spoken_languages: TvDetailSpokenLanguagesItem[];
+  status: string;
+  tagline: string;
+  type: string;
+  vote_average: number;
+  vote_count: number;
 }
 
 export interface TrendingShow {
@@ -79,6 +148,17 @@ export interface PatchedUser {
   email?: string;
 }
 
+export type MovieDetailSpokenLanguagesItem = { [key: string]: unknown };
+
+export type MovieDetailProductionCountriesItem = { [key: string]: unknown };
+
+export type MovieDetailProductionCompaniesItem = { [key: string]: unknown };
+
+/**
+ * @nullable
+ */
+export type MovieDetailBelongsToCollection = unknown | null;
+
 /**
  * * `tv` - tv
  * `movie` - movie
@@ -87,6 +167,43 @@ export enum MediaTypeEnum {
   tv = "tv",
   movie = "movie",
 }
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export interface MovieDetail {
+  adult: boolean;
+  /** @nullable */
+  backdrop_path: string | null;
+  /** @nullable */
+  belongs_to_collection: MovieDetailBelongsToCollection;
+  budget: number;
+  genres: Genre[];
+  /** @nullable */
+  homepage: string | null;
+  id: number;
+  imdb_id: string;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  /** @nullable */
+  poster_path: string | null;
+  production_companies: MovieDetailProductionCompaniesItem[];
+  production_countries: MovieDetailProductionCountriesItem[];
+  release_date: string;
+  revenue: number;
+  runtime: number;
+  spoken_languages: MovieDetailSpokenLanguagesItem[];
+  status: string;
+  tagline: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
 export interface EmailTokenObtain {
   email: string;
   password: string;

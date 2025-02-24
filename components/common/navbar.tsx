@@ -17,7 +17,9 @@ const NavbarItem = ({ icon, href, onClick }: NavbarItemProps) => {
       onClick={onClick}
       className="flex flex-col items-center justify-center text-white relative"
     >
-      {icon}
+      <div className="active:bg-white active:bg-opacity-10 rounded-lg p-4 transition-all">
+        {icon}
+      </div>
       {isActive && (
         <div className="size-1.5 bg-white rounded-full absolute bottom-4" />
       )}
@@ -46,7 +48,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 w-screen h-20 bg-white bg-opacity-10 backdrop-blur-sm grid grid-cols-4">
+    <div className="fixed bottom-0 left-0 w-screen h-20 bg-black bg-opacity-30 backdrop-blur-lg grid grid-cols-4">
       {items.map((item) => (
         <NavbarItem key={item.href} {...item} />
       ))}

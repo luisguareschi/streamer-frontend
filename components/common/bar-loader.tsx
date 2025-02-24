@@ -8,7 +8,7 @@ export const BarLoader = (props: BarLoaderProps) => {
   return (
     <BaseBarLoader
       color="#e5e7eb"
-      className={cn("bg-gray-200", props.className)}
+      className={cn("bg-neutral-200", props.className)}
       {...props}
     />
   );

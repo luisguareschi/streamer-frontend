@@ -22,10 +22,13 @@ import type {
   UseQueryResult,
 } from "@tanstack/react-query";
 import type {
+  ApiShowsSearchRetrieveParams,
   EmailTokenObtain,
+  MovieDetail,
   PatchedUser,
   TokenRefresh,
   TrendingShowsResponse,
+  TvDetail,
   User,
   UserRegistration,
 } from "../baseAppBackendAPI.schemas";
@@ -741,6 +744,293 @@ export const useApiShowsDestroy = <
 
   return useMutation(mutationOptions);
 };
+export const apiShowsMovieRetrieve = (id: string, signal?: AbortSignal) => {
+  return customAxios<MovieDetail>({
+    url: `/api/shows/movie/${id}/`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getApiShowsMovieRetrieveQueryKey = (id: string) => {
+  return [`/api/shows/movie/${id}/`] as const;
+};
+
+export const getApiShowsMovieRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getApiShowsMovieRetrieveQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiShowsMovieRetrieve>>
+  > = ({ signal }) => apiShowsMovieRetrieve(id, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiShowsMovieRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsMovieRetrieve>>
+>;
+export type ApiShowsMovieRetrieveQueryError = unknown;
+
+export function useApiShowsMovieRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiShowsMovieRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiShowsMovieRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiShowsMovieRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsMovieRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowsMovieRetrieveQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const apiShowsSearchRetrieve = (
+  params: ApiShowsSearchRetrieveParams,
+  signal?: AbortSignal,
+) => {
+  return customAxios<TrendingShowsResponse>({
+    url: `/api/shows/search/`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getApiShowsSearchRetrieveQueryKey = (
+  params: ApiShowsSearchRetrieveParams,
+) => {
+  return [`/api/shows/search/`, ...(params ? [params] : [])] as const;
+};
+
+export const getApiShowsSearchRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiShowsSearchRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getApiShowsSearchRetrieveQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiShowsSearchRetrieve>>
+  > = ({ signal }) => apiShowsSearchRetrieve(params, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiShowsSearchRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsSearchRetrieve>>
+>;
+export type ApiShowsSearchRetrieveQueryError = unknown;
+
+export function useApiShowsSearchRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiShowsSearchRetrieveParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiShowsSearchRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiShowsSearchRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiShowsSearchRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiShowsSearchRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiShowsSearchRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiShowsSearchRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsSearchRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowsSearchRetrieveQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
 export const apiShowsTrendingRetrieve = (signal?: AbortSignal) => {
   return customAxios<TrendingShowsResponse>({
     url: `/api/shows/trending/`,
@@ -854,6 +1144,148 @@ export function useApiShowsTrendingRetrieve<
   >;
 }): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
   const queryOptions = getApiShowsTrendingRetrieveQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const apiShowsTvRetrieve = (id: string, signal?: AbortSignal) => {
+  return customAxios<TvDetail>({
+    url: `/api/shows/tv/${id}/`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getApiShowsTvRetrieveQueryKey = (id: string) => {
+  return [`/api/shows/tv/${id}/`] as const;
+};
+
+export const getApiShowsTvRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getApiShowsTvRetrieveQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiShowsTvRetrieve>>
+  > = ({ signal }) => apiShowsTvRetrieve(id, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiShowsTvRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsTvRetrieve>>
+>;
+export type ApiShowsTvRetrieveQueryError = unknown;
+
+export function useApiShowsTvRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiShowsTvRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiShowsTvRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiShowsTvRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsTvRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowsTvRetrieveQueryOptions(id, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData>;

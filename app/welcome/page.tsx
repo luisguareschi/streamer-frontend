@@ -17,7 +17,7 @@ const WelcomePage = () => {
         <h1 className="text-center text-2xl font-bold mb-4 ">
           Start Watching Movies and TV Shows on Streamer
         </h1>
-        <p className="text-center text-gray-400 font-light mb-4 ">
+        <p className="text-center text-neutral-400 font-light mb-4 ">
           Watch unlimited movies and TV shows on Streamer. Completely for free.
         </p>
         <Link href="/login" className="w-full ">

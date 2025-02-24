@@ -107,7 +107,7 @@ const LoginPage = () => {
           <Button
             variant="link"
             size="sm"
-            className="font-medium text-gray-500"
+            className="font-medium text-neutral-500"
             onClick={handleForgotPassword}
           >
             Forgot Password?
@@ -115,7 +115,7 @@ const LoginPage = () => {
         </div>
       )}
       <div className="flex justify-center items-center absolute bottom-10">
-        <p className="text-gray-300">
+        <p className="text-neutral-300">
           {showLogin ? "Don't have an account?" : "Already have an account?"}
         </p>
         <Button

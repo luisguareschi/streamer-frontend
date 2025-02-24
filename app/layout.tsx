@@ -16,14 +16,15 @@ export const metadata: Metadata = {
 
 export const viewport = {
   themeColor: "#000000",
+  userScalable: false,
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className={`${font.className} bg-black`}>
+    <html lang="en" className="h-full w-full">
+      <body className={`${font.className} bg-black h-full w-full`}>
         <Providers>
           {children}
           <Toaster />

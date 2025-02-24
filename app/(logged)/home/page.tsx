@@ -1,21 +1,66 @@
 "use client";
-import useCurrentUser from "@/queries/auth/useCurrentUser";
-import useLogout from "@/queries/auth/useLogout";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { HorizontalShowList } from "@/components/common/horizontal-show-list";
+import { useApiShowsTrendingRetrieve } from "@/api/api/api";
 
 const Home = () => {
-  const { user } = useCurrentUser();
-  const { logout } = useLogout();
+  const { data: trendingShows, isLoading: loadingTrendingShows } =
+    useApiShowsTrendingRetrieve();
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <Card className="flex flex-col items-center justify-center p-5 w-fit gap-2">
-        <h1>Home</h1>
-        <p>Welcome, {user?.username}</p>
-        <Button onClick={logout} className="w-full">
-          Logout
-        </Button>
-      </Card>
+    <div className="flex flex-col items-center justify-start h-screen p-4">
+      <HorizontalShowList
+        title="Trending Shows"
+        shows={trendingShows?.results?.map((show) => ({
+          imgUrl: show.poster_path || "",
+          id: show.id,
+          mediaType: show.media_type,
+        }))}
+        isLoading={loadingTrendingShows}
+      />
+      <HorizontalShowList
+        title="Trending Shows"
+        shows={trendingShows?.results?.map((show) => ({
+          imgUrl: show.poster_path || "",
+          id: show.id,
+          mediaType: show.media_type,
+        }))}
+        isLoading={loadingTrendingShows}
+      />
+      <HorizontalShowList
+        title="Trending Shows"
+        shows={trendingShows?.results?.map((show) => ({
+          imgUrl: show.poster_path || "",
+          id: show.id,
+          mediaType: show.media_type,
+        }))}
+        isLoading={loadingTrendingShows}
+      />
+      <HorizontalShowList
+        title="Trending Shows"
+        shows={trendingShows?.results?.map((show) => ({
+          imgUrl: show.poster_path || "",
+          id: show.id,
+          mediaType: show.media_type,
+        }))}
+        isLoading={loadingTrendingShows}
+      />
+      <HorizontalShowList
+        title="Trending Shows"
+        shows={trendingShows?.results?.map((show) => ({
+          imgUrl: show.poster_path || "",
+          id: show.id,
+          mediaType: show.media_type,
+        }))}
+        isLoading={loadingTrendingShows}
+      />
+      <HorizontalShowList
+        title="Trending Shows"
+        shows={trendingShows?.results?.map((show) => ({
+          imgUrl: show.poster_path || "",
+          id: show.id,
+          mediaType: show.media_type,
+        }))}
+        isLoading={loadingTrendingShows}
+      />
     </div>
   );
 };
