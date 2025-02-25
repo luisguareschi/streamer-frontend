@@ -35,6 +35,7 @@ const Tag = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [seasonNumber, setSeasonNumber] = useState(1);
   const { data: episodes, isLoading: isLoadingEpisodes } =
     useApiShowsGetTvEpisodesRetrieve(
@@ -82,8 +83,8 @@ export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
   };
 
   return (
-    <Drawer>
-      <DrawerTrigger>
+    <Drawer dismissible={false} open={isOpen}>
+      <DrawerTrigger onClick={() => setIsOpen(true)}>
         <Button className="w-full mt-4" variant="roundedWhite" size="xl">
           Watch Now
         </Button>
@@ -92,7 +93,7 @@ export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
         className="h-[100vh] bg-neutral-400/10 backdrop-blur-lg border-none rounded-none p-4 flex flex-col gap-6"
         showPill={false}
       >
-        <DrawerClose asChild>
+        <DrawerClose asChild onClick={() => setIsOpen(false)}>
           <Button
             variant="glass"
             size="icon"
