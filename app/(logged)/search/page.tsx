@@ -5,18 +5,21 @@ import {
 } from "@/api/api/api";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { VerticalShowCard } from "@/components/common/horizontal-show-card";
+import { VerticalShowCard } from "@/components/common/vertical-show-card";
 import { BarLoader } from "@/components/common/bar-loader";
-import { CircleX } from "lucide-react";
+import { ApiShowsTrendingRetrieveTimeWindow } from "@/api/baseAppBackendAPI.schemas";
 
 const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { data: trendingShows, isLoading: isTrendingLoading } =
-    useApiShowsTrendingRetrieve({
-      query: {
-        enabled: !searchQuery,
+    useApiShowsTrendingRetrieve(
+      { time_window: ApiShowsTrendingRetrieveTimeWindow.day },
+      {
+        query: {
+          enabled: !searchQuery,
+        },
       },
-    });
+    );
   const { data: searchResults, isLoading: isSearchLoading } =
     useApiShowsSearchRetrieve(
       { query: searchQuery },

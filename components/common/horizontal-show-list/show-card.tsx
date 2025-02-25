@@ -23,7 +23,7 @@ export const ShowCard = ({
 
   return (
     <div
-      className="aspect-[2/3] min-h-32 min-w-32 rounded-lg overflow-hidden"
+      className="aspect-[2/3] min-h-36 min-w-36 rounded-lg overflow-hidden"
       onClick={handleClick}
     >
       {!skeleton && (

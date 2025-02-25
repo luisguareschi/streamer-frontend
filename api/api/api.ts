@@ -22,7 +22,9 @@ import type {
   UseQueryResult,
 } from "@tanstack/react-query";
 import type {
+  ApiShowsPopularRetrieveParams,
   ApiShowsSearchRetrieveParams,
+  ApiShowsTrendingRetrieveParams,
   EmailTokenObtain,
   MovieDetail,
   PatchedUser,
@@ -887,6 +889,150 @@ export function useApiShowsMovieRetrieve<
   return query;
 }
 
+export const apiShowsPopularRetrieve = (
+  params?: ApiShowsPopularRetrieveParams,
+  signal?: AbortSignal,
+) => {
+  return customAxios<TrendingShowsResponse>({
+    url: `/api/shows/popular/`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getApiShowsPopularRetrieveQueryKey = (
+  params?: ApiShowsPopularRetrieveParams,
+) => {
+  return [`/api/shows/popular/`, ...(params ? [params] : [])] as const;
+};
+
+export const getApiShowsPopularRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+  TError = unknown,
+>(
+  params?: ApiShowsPopularRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getApiShowsPopularRetrieveQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiShowsPopularRetrieve>>
+  > = ({ signal }) => apiShowsPopularRetrieve(params, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiShowsPopularRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsPopularRetrieve>>
+>;
+export type ApiShowsPopularRetrieveQueryError = unknown;
+
+export function useApiShowsPopularRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+  TError = unknown,
+>(
+  params: undefined | ApiShowsPopularRetrieveParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiShowsPopularRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+  TError = unknown,
+>(
+  params?: ApiShowsPopularRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiShowsPopularRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+  TError = unknown,
+>(
+  params?: ApiShowsPopularRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiShowsPopularRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+  TError = unknown,
+>(
+  params?: ApiShowsPopularRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsPopularRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowsPopularRetrieveQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
 export const apiShowsSearchRetrieve = (
   params: ApiShowsSearchRetrieveParams,
   signal?: AbortSignal,
@@ -1031,38 +1177,47 @@ export function useApiShowsSearchRetrieve<
   return query;
 }
 
-export const apiShowsTrendingRetrieve = (signal?: AbortSignal) => {
+export const apiShowsTrendingRetrieve = (
+  params?: ApiShowsTrendingRetrieveParams,
+  signal?: AbortSignal,
+) => {
   return customAxios<TrendingShowsResponse>({
     url: `/api/shows/trending/`,
     method: "GET",
+    params,
     signal,
   });
 };
 
-export const getApiShowsTrendingRetrieveQueryKey = () => {
-  return [`/api/shows/trending/`] as const;
+export const getApiShowsTrendingRetrieveQueryKey = (
+  params?: ApiShowsTrendingRetrieveParams,
+) => {
+  return [`/api/shows/trending/`, ...(params ? [params] : [])] as const;
 };
 
 export const getApiShowsTrendingRetrieveQueryOptions = <
   TData = Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
   TError = unknown,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
-      TError,
-      TData
-    >
-  >;
-}) => {
+>(
+  params?: ApiShowsTrendingRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
   const { query: queryOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getApiShowsTrendingRetrieveQueryKey();
+    queryOptions?.queryKey ?? getApiShowsTrendingRetrieveQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>
-  > = ({ signal }) => apiShowsTrendingRetrieve(signal);
+  > = ({ signal }) => apiShowsTrendingRetrieve(params, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
@@ -1079,71 +1234,83 @@ export type ApiShowsTrendingRetrieveQueryError = unknown;
 export function useApiShowsTrendingRetrieve<
   TData = Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
   TError = unknown,
->(options: {
-  query: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
-      TError,
-      TData
-    >
-  > &
-    Pick<
-      DefinedInitialDataOptions<
+>(
+  params: undefined | ApiShowsTrendingRetrieveParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
         Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
         TError,
         TData
-      >,
-      "initialData"
-    >;
-}): DefinedUseQueryResult<TData, TError> & {
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData>;
 };
 export function useApiShowsTrendingRetrieve<
   TData = Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
   TError = unknown,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
-      TError,
-      TData
-    >
-  > &
-    Pick<
-      UndefinedInitialDataOptions<
+>(
+  params?: ApiShowsTrendingRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
         Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
         TError,
         TData
-      >,
-      "initialData"
-    >;
-}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 export function useApiShowsTrendingRetrieve<
   TData = Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
   TError = unknown,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
-      TError,
-      TData
-    >
-  >;
-}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+>(
+  params?: ApiShowsTrendingRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
 export function useApiShowsTrendingRetrieve<
   TData = Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
   TError = unknown,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
-      TError,
-      TData
-    >
-  >;
-}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
-  const queryOptions = getApiShowsTrendingRetrieveQueryOptions(options);
+>(
+  params?: ApiShowsTrendingRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsTrendingRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowsTrendingRetrieveQueryOptions(params, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData>;

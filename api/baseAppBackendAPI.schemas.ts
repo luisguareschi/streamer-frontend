@@ -7,11 +7,33 @@
  * API para el sistema de BaseApp Backend
  */
 
+export enum ApiShowsTrendingRetrieveTimeWindow {
+  day = "day",
+  week = "week",
+}
+export type ApiShowsTrendingRetrieveParams = {
+  /**
+   * Time window
+   */
+  time_window?: ApiShowsTrendingRetrieveTimeWindow;
+};
+
 export type ApiShowsSearchRetrieveParams = {
   /**
    * Query string
    */
   query: string;
+};
+
+export enum ApiShowsPopularRetrieveMediaType {
+  movie = "movie",
+  tv = "tv",
+}
+export type ApiShowsPopularRetrieveParams = {
+  /**
+   * Media type
+   */
+  media_type?: ApiShowsPopularRetrieveMediaType;
 };
 
 export interface UserRegistration {

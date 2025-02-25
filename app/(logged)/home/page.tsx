@@ -1,65 +1,74 @@
 "use client";
 import { HorizontalShowList } from "@/components/common/horizontal-show-list";
-import { useApiShowsTrendingRetrieve } from "@/api/api/api";
+import {
+  useApiShowsPopularRetrieve,
+  useApiShowsTrendingRetrieve,
+} from "@/api/api/api";
+import {
+  ApiShowsPopularRetrieveMediaType,
+  ApiShowsTrendingRetrieveTimeWindow,
+} from "@/api/baseAppBackendAPI.schemas";
 
 const Home = () => {
-  const { data: trendingShows, isLoading: loadingTrendingShows } =
-    useApiShowsTrendingRetrieve();
+  const { data: trendingShowsToday, isLoading: loadingTrendingShowsToday } =
+    useApiShowsTrendingRetrieve({
+      time_window: ApiShowsTrendingRetrieveTimeWindow.day,
+    });
+  const { data: trendingShowsWeek, isLoading: loadingTrendingShowsWeek } =
+    useApiShowsTrendingRetrieve({
+      time_window: ApiShowsTrendingRetrieveTimeWindow.week,
+    });
+  const { data: popularTv, isLoading: loadingPopularTv } =
+    useApiShowsPopularRetrieve({
+      media_type: ApiShowsPopularRetrieveMediaType.tv,
+    });
+  const { data: popularMovie, isLoading: loadingPopularMovie } =
+    useApiShowsPopularRetrieve({
+      media_type: ApiShowsPopularRetrieveMediaType.movie,
+    });
+  const isLoading =
+    loadingTrendingShowsToday ||
+    loadingTrendingShowsWeek ||
+    loadingPopularTv ||
+    loadingPopularMovie;
+
   return (
-    <div className="flex flex-col items-center justify-start h-screen p-4">
+    <div className="flex flex-col h-screen p-4 gap-8 pb-[100px]">
       <HorizontalShowList
-        title="Trending Shows"
-        shows={trendingShows?.results?.map((show) => ({
+        title="Trending Today"
+        shows={trendingShowsToday?.results?.map((show) => ({
           imgUrl: show.poster_path || "",
           id: show.id,
           mediaType: show.media_type,
         }))}
-        isLoading={loadingTrendingShows}
+        isLoading={isLoading}
       />
       <HorizontalShowList
-        title="Trending Shows"
-        shows={trendingShows?.results?.map((show) => ({
+        title="Hot This Week"
+        shows={trendingShowsWeek?.results?.map((show) => ({
           imgUrl: show.poster_path || "",
           id: show.id,
           mediaType: show.media_type,
         }))}
-        isLoading={loadingTrendingShows}
+        isLoading={isLoading}
       />
       <HorizontalShowList
-        title="Trending Shows"
-        shows={trendingShows?.results?.map((show) => ({
+        title="Popular TV Shows"
+        shows={popularTv?.results?.map((show) => ({
           imgUrl: show.poster_path || "",
           id: show.id,
           mediaType: show.media_type,
         }))}
-        isLoading={loadingTrendingShows}
+        isLoading={isLoading}
       />
       <HorizontalShowList
-        title="Trending Shows"
-        shows={trendingShows?.results?.map((show) => ({
+        title="Popular Movies"
+        shows={popularMovie?.results?.map((show) => ({
           imgUrl: show.poster_path || "",
           id: show.id,
           mediaType: show.media_type,
         }))}
-        isLoading={loadingTrendingShows}
-      />
-      <HorizontalShowList
-        title="Trending Shows"
-        shows={trendingShows?.results?.map((show) => ({
-          imgUrl: show.poster_path || "",
-          id: show.id,
-          mediaType: show.media_type,
-        }))}
-        isLoading={loadingTrendingShows}
-      />
-      <HorizontalShowList
-        title="Trending Shows"
-        shows={trendingShows?.results?.map((show) => ({
-          imgUrl: show.poster_path || "",
-          id: show.id,
-          mediaType: show.media_type,
-        }))}
-        isLoading={loadingTrendingShows}
+        isLoading={isLoading}
       />
     </div>
   );
