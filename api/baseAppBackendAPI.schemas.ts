@@ -36,6 +36,17 @@ export type ApiShowsPopularRetrieveParams = {
   media_type?: ApiShowsPopularRetrieveMediaType;
 };
 
+export type ApiShowsGetTvEpisodesRetrieveParams = {
+  /**
+   * Season number
+   */
+  season_number: number;
+  /**
+   * TV ID
+   */
+  tv_id: number;
+};
+
 export interface UserRegistration {
   /**
    * Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
@@ -58,6 +69,41 @@ export interface User {
   username: string;
   /** @maxLength 254 */
   email?: string;
+}
+
+export interface TvEpisodesResponse {
+  _id: string;
+  air_date: string;
+  episodes: TvEpisode[];
+  name: string;
+  overview: string;
+  id: number;
+  /** @nullable */
+  poster_path: string | null;
+  season_number: number;
+  vote_average: number;
+}
+
+export type TvEpisodeGuestStarsItem = { [key: string]: unknown };
+
+export type TvEpisodeCrewItem = { [key: string]: unknown };
+
+export interface TvEpisode {
+  air_date: string;
+  episode_number: number;
+  id: number;
+  name: string;
+  overview: string;
+  production_code: string;
+  runtime: number;
+  season_number: number;
+  show_id: number;
+  /** @nullable */
+  still_path: string | null;
+  vote_average: number;
+  vote_count: number;
+  crew: TvEpisodeCrewItem[];
+  guest_stars: TvEpisodeGuestStarsItem[];
 }
 
 export type TvDetailSpokenLanguagesItem = { [key: string]: unknown };

@@ -21,3 +21,7 @@
 .no-scrollbar::-webkit-scrollbar-track-piece {
   background-color: transparent;
 }
+
+
+
+@layer base {}

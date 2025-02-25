@@ -53,6 +53,8 @@ const ShowDetailPage = () => {
           releaseDate={movie?.release_date || show?.first_air_date || ""}
           genres={genres?.map((genre) => genre.name) || []}
           data={data}
+          tv={show}
+          movie={movie}
         />
       </div>
     </div>

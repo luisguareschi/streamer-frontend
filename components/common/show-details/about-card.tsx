@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { MovieDetail } from "@/api/baseAppBackendAPI.schemas";
+import { TvDetail } from "@/api/baseAppBackendAPI.schemas";
+import { EpisodeDrawer } from "@/components/common/show-details/episode-drawer";
 import { Star } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
@@ -9,6 +11,8 @@ interface AboutCardProps {
   releaseDate: string;
   genres: string[];
   data: string;
+  tv?: TvDetail;
+  movie?: MovieDetail;
 }
 
 export const AboutCard = ({
@@ -18,6 +22,8 @@ export const AboutCard = ({
   releaseDate,
   genres,
   data,
+  tv,
+  movie,
 }: AboutCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -69,9 +75,7 @@ export const AboutCard = ({
           </button>
         )}
       </div>
-      <Button className="w-full mt-4" variant="roundedWhite" size="xl">
-        Watch Now
-      </Button>
+      <EpisodeDrawer tv={tv} movie={movie} />
     </div>
   );
 };

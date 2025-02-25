@@ -22,6 +22,7 @@ import type {
   UseQueryResult,
 } from "@tanstack/react-query";
 import type {
+  ApiShowsGetTvEpisodesRetrieveParams,
   ApiShowsPopularRetrieveParams,
   ApiShowsSearchRetrieveParams,
   ApiShowsTrendingRetrieveParams,
@@ -31,6 +32,7 @@ import type {
   TokenRefresh,
   TrendingShowsResponse,
   TvDetail,
+  TvEpisodesResponse,
   User,
   UserRegistration,
 } from "../baseAppBackendAPI.schemas";
@@ -746,6 +748,153 @@ export const useApiShowsDestroy = <
 
   return useMutation(mutationOptions);
 };
+export const apiShowsGetTvEpisodesRetrieve = (
+  params: ApiShowsGetTvEpisodesRetrieveParams,
+  signal?: AbortSignal,
+) => {
+  return customAxios<TvEpisodesResponse>({
+    url: `/api/shows/get_tv_episodes/`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getApiShowsGetTvEpisodesRetrieveQueryKey = (
+  params: ApiShowsGetTvEpisodesRetrieveParams,
+) => {
+  return [`/api/shows/get_tv_episodes/`, ...(params ? [params] : [])] as const;
+};
+
+export const getApiShowsGetTvEpisodesRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiShowsGetTvEpisodesRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getApiShowsGetTvEpisodesRetrieveQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>
+  > = ({ signal }) => apiShowsGetTvEpisodesRetrieve(params, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiShowsGetTvEpisodesRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>
+>;
+export type ApiShowsGetTvEpisodesRetrieveQueryError = unknown;
+
+export function useApiShowsGetTvEpisodesRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiShowsGetTvEpisodesRetrieveParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiShowsGetTvEpisodesRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiShowsGetTvEpisodesRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiShowsGetTvEpisodesRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiShowsGetTvEpisodesRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiShowsGetTvEpisodesRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiShowsGetTvEpisodesRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowsGetTvEpisodesRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowsGetTvEpisodesRetrieveQueryOptions(
+    params,
+    options,
+  );
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
 export const apiShowsMovieRetrieve = (id: string, signal?: AbortSignal) => {
   return customAxios<MovieDetail>({
     url: `/api/shows/movie/${id}/`,
