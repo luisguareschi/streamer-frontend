@@ -12,6 +12,7 @@ const font = Poppins({
 export const metadata: Metadata = {
   title: "Streamer",
   description: "Watch your favorite TV shows and movies, all in one place.",
+  manifest: "/manifest.json",
 };
 
 export const viewport = {
