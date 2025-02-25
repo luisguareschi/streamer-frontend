@@ -26,6 +26,8 @@ const buttonVariants = cva(
           "bg-transparent border border-white text-white font-semibold active:bg-neutral-800/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90 rounded-full",
         glass:
           "bg-neutral-200/30 backdrop-blur-md text-white rounded-xl active:bg-neutral-200/50 transition-all duration-300 ease-in-out",
+        roundedNeutral:
+          "bg-neutral-500 text-neutral-900 rounded-full active:bg-neutral-700 transition-all",
       },
       size: {
         default: "h-10 px-4 py-2",
