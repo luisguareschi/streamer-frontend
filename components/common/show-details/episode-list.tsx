@@ -1,13 +1,16 @@
 import { Separator } from "@/components/ui/separator";
 import { BarLoader } from "../bar-loader";
 import { MediaTypeEnum } from "@/api/baseAppBackendAPI.schemas";
+import { useRouter } from "next/navigation";
 
 interface EpisodeItemProps {
   id: number;
-  number: number;
+  number?: number;
   name: string;
   duration: number;
   mediaType: MediaTypeEnum;
+  season?: number;
+  tmdbId: number;
 }
 
 const EpisodeItem = ({
@@ -15,9 +18,26 @@ const EpisodeItem = ({
   name,
   duration,
   mediaType,
+  season = 0,
+  tmdbId,
 }: EpisodeItemProps) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (mediaType === MediaTypeEnum.movie) {
+      router.push(`/watch?mediaType=${mediaType}&id=${tmdbId}`);
+      return;
+    }
+    router.push(
+      `/watch?mediaType=${mediaType}&id=${tmdbId}&season=${season}&episode=${number}`,
+    );
+  };
+
   return (
-    <button className="flex justify-between items-center py-3 w-full rounded-md active:bg-neutral-500/20 transition-all">
+    <button
+      className="flex justify-between items-center py-3 w-full rounded-md active:bg-neutral-500/20 transition-all"
+      onClick={handleClick}
+    >
       <div className="flex flex-col gap-1 w-full items-start">
         <h2 className="text-neutral-400">
           {mediaType === MediaTypeEnum.movie

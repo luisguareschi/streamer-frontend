@@ -61,10 +61,10 @@ export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
       return [
         {
           id: movie.id,
-          number: 1,
           name: movie.title,
           duration: movie.runtime,
           mediaType: MediaTypeEnum.movie,
+          tmdbId: movie.id,
         },
       ];
     }
@@ -76,6 +76,8 @@ export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
           name: episode.name,
           duration: episode.runtime,
           mediaType: MediaTypeEnum.tv,
+          season: episode.season_number,
+          tmdbId: tv.id,
         })) || []
       );
     }
