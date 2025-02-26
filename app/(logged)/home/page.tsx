@@ -8,6 +8,7 @@ import {
   ApiShowsPopularRetrieveMediaType,
   ApiShowsTrendingRetrieveTimeWindow,
 } from "@/api/baseAppBackendAPI.schemas";
+import { TopPicksList } from "@/components/common/top-picks-list";
 
 const Home = () => {
   const { data: trendingShowsToday, isLoading: loadingTrendingShowsToday } =
@@ -34,6 +35,13 @@ const Home = () => {
 
   return (
     <div className="flex flex-col h-full p-4 gap-8 pb-28 overflow-y-auto no-scrollbar">
+      <TopPicksList
+        shows={trendingShowsToday?.results?.map((show) => ({
+          imgUrl: show.poster_path || "",
+          id: show.id,
+          mediaType: show.media_type,
+        }))}
+      />
       <HorizontalShowList
         title="Trending Today"
         shows={trendingShowsToday?.results?.map((show) => ({
