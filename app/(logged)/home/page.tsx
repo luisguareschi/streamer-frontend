@@ -41,6 +41,7 @@ const Home = () => {
           id: show.id,
           mediaType: show.media_type,
         }))}
+        isLoading={isLoading}
       />
       <HorizontalShowList
         title="Trending Today"

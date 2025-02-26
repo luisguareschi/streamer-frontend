@@ -6,9 +6,22 @@ export interface TopPickCardProps {
   imgUrl: string;
   id: number;
   mediaType?: MediaTypeEnum;
+  isLoading?: boolean;
 }
 
-export const TopPickCard = ({ imgUrl, id, mediaType }: TopPickCardProps) => {
+export const TopPickCard = ({
+  imgUrl,
+  id,
+  mediaType,
+  isLoading,
+}: TopPickCardProps) => {
+  if (isLoading) {
+    return (
+      <div className="aspect-[2/3] w-[70vw] rounded-2xl overflow-hidden">
+        <div className="w-full h-full bg-neutral-800 animate-pulse" />
+      </div>
+    );
+  }
   return (
     <Link
       href={`/show/${id}?mediaType=${mediaType}`}

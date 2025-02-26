@@ -4,9 +4,10 @@ import { TopPickCard, TopPickCardProps } from "./top-pick-card";
 
 interface TopPicksListProps {
   shows?: TopPickCardProps[];
+  isLoading?: boolean;
 }
 
-export const TopPicksList = ({ shows }: TopPicksListProps) => {
+export const TopPicksList = ({ shows, isLoading }: TopPicksListProps) => {
   const [selectedShow, setSelectedShow] = useState<TopPickCardProps | null>(
     null,
   );
@@ -21,14 +22,16 @@ export const TopPicksList = ({ shows }: TopPicksListProps) => {
 
   return (
     <div className="flex flex-col gap-10 p-4 pb-10 relative -ml-4">
-      <div className="absolute top-0 left-0 w-screen h-full overflow-hidden">
-        <img
-          src={selectedShow?.imgUrl}
-          alt={`${selectedShow?.mediaType} ${selectedShow?.id}`}
-          className="w-full h-full object-cover blur-xl brightness-100 saturate-150 scale-150 z-10"
-        />
-        <div className="absolute top-0 left-0 w-screen h-full bg-gradient-to-t from-black to-transparent z-10" />
-      </div>
+      {!isLoading && (
+        <div className="absolute top-0 left-0 w-screen h-full overflow-hidden">
+          <img
+            src={selectedShow?.imgUrl}
+            alt={`${selectedShow?.mediaType} ${selectedShow?.id}`}
+            className="w-full h-full object-cover blur-xl brightness-100 saturate-150 scale-150 z-10"
+          />
+          <div className="absolute top-0 left-0 w-screen h-full bg-gradient-to-t from-black to-transparent z-10" />
+        </div>
+      )}
       <h1 className="text-white font-medium text-2xl relative z-10">
         Streamer
       </h1>
@@ -38,6 +41,7 @@ export const TopPicksList = ({ shows }: TopPicksListProps) => {
           imgUrl={selectedShow?.imgUrl || ""}
           id={selectedShow?.id || 0}
           mediaType={selectedShow?.mediaType}
+          isLoading={isLoading}
         />
       </div>
     </div>
