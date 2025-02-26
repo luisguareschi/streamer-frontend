@@ -70,7 +70,7 @@ const WatchPage = () => {
   return (
     <div className="fixed top-0 left-0 bg-black flex flex-col h-full w-full justify-center items-center z-10">
       <div
-        className="absolute top-0 left-0 p-4 w-full grid justify-items-start items-center"
+        className="absolute top-0 left-0 p-4 w-full grid justify-items-start items-center gap-2"
         style={{
           gridTemplateColumns: "1fr auto 1fr",
         }}
@@ -84,7 +84,9 @@ const WatchPage = () => {
           <ArrowLeftIcon className="w-5 h-5 min-w-5 min-h-5" />
           Back
         </Button>
-        <h1 className="font-medium text-white text-center">{header}</h1>
+        <h1 className="font-medium text-white text-center line-clamp-1">
+          {header}
+        </h1>
       </div>
       <iframe
         src={url}

@@ -34,7 +34,7 @@ const Home = () => {
     loadingPopularMovie;
 
   return (
-    <div className="flex flex-col h-full p-4 gap-8 pb-28 overflow-y-auto no-scrollbar">
+    <div className="flex flex-col h-full p-4 gap-8 pb-28 overflow-y-auto no-scrollbar pt-0">
       <TopPicksList
         shows={trendingShowsToday?.results?.map((show) => ({
           imgUrl: show.poster_path || "",
