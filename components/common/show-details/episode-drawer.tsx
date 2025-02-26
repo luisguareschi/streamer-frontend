@@ -65,6 +65,7 @@ export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
           duration: movie.runtime,
           mediaType: MediaTypeEnum.movie,
           tmdbId: movie.id,
+          releaseDate: movie.release_date,
         },
       ];
     }
@@ -78,6 +79,7 @@ export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
           mediaType: MediaTypeEnum.tv,
           season: episode.season_number,
           tmdbId: tv.id,
+          releaseDate: episode.air_date,
         })) || []
       );
     }
@@ -158,7 +160,7 @@ export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
         )}
         {movie && (
           <Button variant="roundedWhite" className="w-full" size="xl">
-            Watch Movie
+            Click below to watch
           </Button>
         )}
         <EpisodeList episodes={episodesList()} isLoading={isLoadingEpisodes} />
