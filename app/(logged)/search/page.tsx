@@ -8,6 +8,7 @@ import { useState } from "react";
 import { VerticalShowCard } from "@/components/common/vertical-show-card";
 import { BarLoader } from "@/components/common/bar-loader";
 import { ApiShowsTrendingRetrieveTimeWindow } from "@/api/baseAppBackendAPI.schemas";
+import dayjs from "dayjs";
 
 const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -30,7 +31,7 @@ const SearchPage = () => {
   const isLoading = isTrendingLoading || isSearchLoading;
 
   return (
-    <div className="flex flex-col px-4 gap-4 h-full">
+    <div className="flex flex-col px-4 gap-4 h-full pb-28 overflow-y-auto no-scrollbar">
       <header className="sticky top-0 bg-black py-4">
         <Input
           variant="neutral"
@@ -52,7 +53,9 @@ const SearchPage = () => {
               mediaType={result.media_type}
               key={result.id}
               releaseDate={
-                result.release_date || result.first_air_date || "Unknown"
+                dayjs(result.release_date || result.first_air_date).format(
+                  "MMM D, YYYY",
+                ) || "Unknown"
               }
               title={result.title || result.name || "Unknown Title"}
               imgUrl={result.poster_path || result.backdrop_path || ""}

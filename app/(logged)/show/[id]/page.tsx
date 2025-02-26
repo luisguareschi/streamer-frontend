@@ -28,6 +28,7 @@ const ShowDetailPage = () => {
   const data = movie
     ? `${movie?.runtime} min`
     : `${show?.number_of_episodes} Episodes`;
+  const rating = movie?.vote_average || show?.vote_average || 0;
   const isLoading = isMovieLoading || isShowLoading;
 
   if (isLoading) {
@@ -49,7 +50,7 @@ const ShowDetailPage = () => {
         <AboutCard
           title={movie?.title || show?.name || ""}
           description={movie?.overview || show?.overview || ""}
-          rating={movie?.vote_average || show?.vote_average || 0}
+          rating={rating}
           releaseDate={movie?.release_date || show?.first_air_date || ""}
           genres={genres?.map((genre) => genre.name) || []}
           data={data}

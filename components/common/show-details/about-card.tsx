@@ -3,6 +3,7 @@ import { TvDetail } from "@/api/baseAppBackendAPI.schemas";
 import { EpisodeDrawer } from "@/components/common/show-details/episode-drawer";
 import { Star } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import dayjs from "dayjs";
 
 interface AboutCardProps {
   title: string;
@@ -50,10 +51,10 @@ export const AboutCard = ({
       <div className="flex gap-2 justify-start items-center text-white font-light text-sm">
         <div className="flex gap-1 justify-center items-center">
           <Star className="w-4 h-4 mb-[2px] text-yellow-500" fill="#eab308 " />
-          <p className="">{rating}</p>
+          <p className="">{rating.toFixed(1)}</p>
         </div>
         <p className="">•</p>
-        <p className="">{releaseDate}</p>
+        <p className="">{dayjs(releaseDate).format("MMM D, YYYY")}</p>
         <p className="">•</p>
         <p className="">{data}</p>
       </div>

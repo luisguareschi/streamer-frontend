@@ -8,7 +8,7 @@ const ProfilePage = () => {
   const { logout } = useLogout();
   const { user } = useCurrentUser();
   return (
-    <div className="flex flex-col gap-4 p-4 w-full h-full pb-20">
+    <div className="flex flex-col gap-4 p-4 w-full h-full pb-28 overflow-y-auto no-scrollbar">
       <h1 className="text-2xl font-medium text-white mb-20">
         Profile Settings
       </h1>

@@ -21,7 +21,7 @@ const NavbarItem = ({ icon, href, onClick }: NavbarItemProps) => {
     >
       <div className="">{icon}</div>
       {isActive && (
-        <div className="size-1.5 bg-white rounded-full absolute bottom-1.5" />
+        <div className="size-1.5 bg-white rounded-full absolute bottom-1" />
       )}
     </Link>
   );

@@ -33,7 +33,7 @@ const Home = () => {
     loadingPopularMovie;
 
   return (
-    <div className="flex flex-col h-screen p-4 gap-8 pb-[100px]">
+    <div className="flex flex-col h-full p-4 gap-8 pb-28 overflow-y-auto no-scrollbar">
       <HorizontalShowList
         title="Trending Today"
         shows={trendingShowsToday?.results?.map((show) => ({
