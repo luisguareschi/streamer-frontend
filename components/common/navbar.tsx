@@ -1,3 +1,5 @@
+import { usePlatform } from "@/hooks/usePlatform";
+import { cn } from "@/lib/utils";
 import { Bookmark, HomeIcon, Search, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,19 +17,18 @@ const NavbarItem = ({ icon, href, onClick }: NavbarItemProps) => {
     <Link
       href={href}
       onClick={onClick}
-      className="flex flex-col items-center justify-center text-white relative"
+      className="flex flex-col items-center justify-center text-white relative size-[56px] active:bg-white active:bg-opacity-10 rounded-lg transition-all"
     >
-      <div className="active:bg-white active:bg-opacity-10 rounded-lg p-4 transition-all">
-        {icon}
-      </div>
+      <div className="">{icon}</div>
       {isActive && (
-        <div className="size-1.5 bg-white rounded-full absolute bottom-4" />
+        <div className="size-1.5 bg-white rounded-full absolute bottom-1.5" />
       )}
     </Link>
   );
 };
 
 export const Navbar = () => {
+  const { isIOS, isPWA } = usePlatform();
   const items: NavbarItemProps[] = [
     {
       icon: <HomeIcon />,
@@ -48,7 +49,12 @@ export const Navbar = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 w-screen h-20 bg-black bg-opacity-30 backdrop-blur-lg grid grid-cols-4">
+    <div
+      className={cn(
+        "fixed bottom-0 left-0 w-screen h-20 bg-black bg-opacity-30 backdrop-blur-lg grid grid-cols-4 justify-items-center items-center",
+        isIOS && isPWA && "pb-6 h-24",
+      )}
+    >
       {items.map((item) => (
         <NavbarItem key={item.href} {...item} />
       ))}
