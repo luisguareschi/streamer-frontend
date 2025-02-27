@@ -53,6 +53,11 @@ const ContinueWatchingCard = ({ show }: { show: ShowWatchProgress }) => {
 
 export const ContinueWatchingList = () => {
   const { data: shows, isLoading } = useApiShowWatchProgressList();
+
+  if (!isLoading && shows?.length === 0) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col gap-2">
       <h1 className="text-lg text-white">Continue Watching</h1>
