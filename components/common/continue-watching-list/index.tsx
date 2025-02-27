@@ -52,7 +52,13 @@ const ContinueWatchingCard = ({ show }: { show: ShowWatchProgress }) => {
 };
 
 export const ContinueWatchingList = () => {
-  const { data: shows, isLoading } = useApiShowWatchProgressList();
+  const { data: shows, isLoading } = useApiShowWatchProgressList({
+    query: {
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
+      refetchInterval: 1000 * 60 * 5, // 5 minutes
+    },
+  });
 
   if (!isLoading && shows?.length === 0) {
     return null;
