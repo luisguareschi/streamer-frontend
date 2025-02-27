@@ -863,6 +863,158 @@ export const useApiShowWatchProgressDestroy = <
 
   return useMutation(mutationOptions);
 };
+export const apiShowWatchProgressProgressRetrieve = (
+  tmdbId: string,
+  signal?: AbortSignal,
+) => {
+  return customAxios<ShowWatchProgress>({
+    url: `/api/show-watch-progress/progress/${tmdbId}/`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getApiShowWatchProgressProgressRetrieveQueryKey = (
+  tmdbId: string,
+) => {
+  return [`/api/show-watch-progress/progress/${tmdbId}/`] as const;
+};
+
+export const getApiShowWatchProgressProgressRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+  TError = unknown,
+>(
+  tmdbId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getApiShowWatchProgressProgressRetrieveQueryKey(tmdbId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>
+  > = ({ signal }) => apiShowWatchProgressProgressRetrieve(tmdbId, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!tmdbId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiShowWatchProgressProgressRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>
+>;
+export type ApiShowWatchProgressProgressRetrieveQueryError = unknown;
+
+export function useApiShowWatchProgressProgressRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+  TError = unknown,
+>(
+  tmdbId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiShowWatchProgressProgressRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+  TError = unknown,
+>(
+  tmdbId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiShowWatchProgressProgressRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+  TError = unknown,
+>(
+  tmdbId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiShowWatchProgressProgressRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+  TError = unknown,
+>(
+  tmdbId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressProgressRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowWatchProgressProgressRetrieveQueryOptions(
+    tmdbId,
+    options,
+  );
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
 export const apiShowsRetrieve = (signal?: AbortSignal) => {
   return customAxios<void>({ url: `/api/shows/`, method: "GET", signal });
 };

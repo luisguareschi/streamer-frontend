@@ -60,13 +60,13 @@ export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
   const setIsOpen = (value: boolean) => {
     const params = new URLSearchParams(searchParams);
     params.set("episodeDrawer", value.toString());
-    router.push(`?${params.toString()}`);
+    router.replace(`?${params.toString()}`);
   };
 
   const setSeasonNumber = (value: number) => {
     const params = new URLSearchParams(searchParams);
     params.set("seasonNumber", value.toString());
-    router.push(`?${params.toString()}`);
+    router.replace(`?${params.toString()}`);
   };
 
   const episodesList = (): EpisodeListProps["episodes"] => {

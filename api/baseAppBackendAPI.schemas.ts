@@ -83,15 +83,7 @@ export interface TvProgress {
    * @maximum 9223372036854776000
    */
   episode?: number;
-  /**
-   * @minimum -9223372036854776000
-   * @maximum 9223372036854776000
-   */
   watched_seconds?: number;
-  /**
-   * @minimum -9223372036854776000
-   * @maximum 9223372036854776000
-   */
   total_seconds?: number;
 }
 
@@ -252,15 +244,7 @@ export type PatchedShowWatchProgressLastWatchedEpisode = TvProgress | null;
 
 export interface MovieProgress {
   readonly id: number;
-  /**
-   * @minimum -9223372036854776000
-   * @maximum 9223372036854776000
-   */
   watched_seconds?: number;
-  /**
-   * @minimum -9223372036854776000
-   * @maximum 9223372036854776000
-   */
   total_seconds?: number;
 }
 

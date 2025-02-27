@@ -7,10 +7,14 @@ import {
   useApiShowsMovieRetrieve,
   useApiShowsTvRetrieve,
   useApiShowWatchProgressCreate,
+  useApiShowWatchProgressProgressRetrieve,
 } from "@/api/api/api";
 import FullScreenLoading from "@/components/common/full-screen-loading";
 import { Suspense, useEffect, useRef } from "react";
 import { usePlayerWatchProgress } from "@/hooks/usePlayerWatchProgress";
+
+// https://vidlink.pro/tv/{tmdbId}/{season}/{episode}
+// https://vidlink.pro/movie/{tmdbId}
 
 const WatchPage = () => {
   const router = useRouter();
@@ -54,8 +58,15 @@ const WatchPage = () => {
       },
     },
   );
+  const { data: showWatchProgress, isLoading: isShowWatchProgressLoading } =
+    useApiShowWatchProgressProgressRetrieve(tmdbId, {
+      query: {
+        enabled: !!tmdbId,
+      },
+    });
 
-  const isLoading = isShowLoading || isMovieLoading;
+  const isLoading =
+    isShowLoading || isMovieLoading || isShowWatchProgressLoading;
 
   const title = mediaType === MediaTypeEnum.movie ? movie?.title : show?.name;
   const header =
@@ -63,16 +74,36 @@ const WatchPage = () => {
       ? title
       : `${title} - S${season}E${episode}`;
 
-  // https://vidlink.pro/tv/{tmdbId}/{season}/{episode}
-  // https://vidlink.pro/movie/{tmdbId}
+  const getStartAtTime = () => {
+    let startAt = undefined;
+    if (!showWatchProgress) {
+      return undefined;
+    }
+    if (mediaType === MediaTypeEnum.movie) {
+      startAt = showWatchProgress?.movie_progress?.[0]?.watched_seconds || 0;
+    }
+    if (mediaType === MediaTypeEnum.tv) {
+      startAt =
+        showWatchProgress?.tv_progress?.find(
+          (progress) =>
+            progress.season === parseInt(season || "-1") &&
+            progress.episode === parseInt(episode || "-1"),
+        )?.watched_seconds || 0;
+    }
+    return startAt ? startAt.toFixed(0) : undefined;
+  };
 
   const url =
     mediaType === MediaTypeEnum.movie
-      ? `https://vidlink.pro/movie/${tmdbId}`
-      : `https://vidlink.pro/tv/${tmdbId}/${season}/${episode}`;
+      ? `https://vidlink.pro/movie/${tmdbId}?startAt=${getStartAtTime()}`
+      : `https://vidlink.pro/tv/${tmdbId}/${season}/${episode}?startAt=${getStartAtTime()}`;
 
   useEffect(() => {
-    if (watchProgress?.event !== "timeupdate") {
+    if (
+      watchProgress?.event !== "timeupdate" ||
+      !watchProgress.currentTime ||
+      !watchProgress.duration
+    ) {
       return;
     }
     if (!tmdbId || !mediaType || !title) {

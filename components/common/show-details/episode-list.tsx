@@ -4,6 +4,8 @@ import { MediaTypeEnum } from "@/api/baseAppBackendAPI.schemas";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { getWatchUrl } from "@/lib/getWatchUrl";
+import { useApiShowWatchProgressProgressRetrieve } from "@/api/api/api";
+import { Progress } from "@/components/ui/progress";
 
 interface EpisodeItemProps {
   id: number;
@@ -14,6 +16,7 @@ interface EpisodeItemProps {
   season?: number;
   tmdbId: number;
   releaseDate: string;
+  progress?: number;
 }
 
 const EpisodeItem = ({
@@ -24,6 +27,7 @@ const EpisodeItem = ({
   season = 0,
   tmdbId,
   releaseDate,
+  progress,
 }: EpisodeItemProps) => {
   const router = useRouter();
   const isReleased = dayjs(releaseDate).isBefore(dayjs());
@@ -35,7 +39,7 @@ const EpisodeItem = ({
 
   return (
     <button
-      className="flex justify-between items-center py-3 w-full rounded-md active:bg-neutral-500/20 transition-all disabled:opacity-50"
+      className="flex justify-between items-center gap-2 py-3 w-full rounded-md active:bg-neutral-500/20 transition-all disabled:opacity-50"
       onClick={handleClick}
       disabled={!isReleased}
     >
@@ -49,6 +53,12 @@ const EpisodeItem = ({
           )}
         </h2>
         <h3 className="text-white line-clamp-1">{name}</h3>
+        {progress && (
+          <Progress
+            value={progress}
+            className="w-full h-1.5 bg-neutral-600 mt-2"
+          />
+        )}
       </div>
       <p className="text-neutral-400 min-w-fit">{duration || "?"} min</p>
     </button>
@@ -61,18 +71,53 @@ export interface EpisodeListProps {
 }
 
 export const EpisodeList = ({ episodes, isLoading }: EpisodeListProps) => {
+  const tmdbId = episodes[0]?.tmdbId;
+  const { data: showWatchProgress, isLoading: isLoadingProgress } =
+    useApiShowWatchProgressProgressRetrieve(tmdbId?.toString() || "", {
+      query: {
+        enabled: !!tmdbId,
+        queryKey: ["current-show-watch-progress", tmdbId],
+      },
+    });
+
+  const getEpisodeProgress = (
+    episode: EpisodeItemProps,
+  ): number | undefined => {
+    if (!showWatchProgress) return undefined;
+    if (showWatchProgress.media_type === MediaTypeEnum.movie) {
+      const movieProgress = showWatchProgress.movie_progress?.[0];
+      return (
+        ((movieProgress?.watched_seconds || 1) /
+          (movieProgress?.total_seconds || 1)) *
+        100
+      );
+    }
+    const tvProgress = showWatchProgress.tv_progress?.find(
+      (progress) =>
+        progress.season === episode.season &&
+        progress.episode === episode.number,
+    );
+    if (!tvProgress) return undefined;
+    return (
+      ((tvProgress.watched_seconds || 1) / (tvProgress.total_seconds || 1)) *
+      100
+    );
+  };
+
+  const isLoadingAll = isLoading || isLoadingProgress;
+
   return (
     <div className="flex flex-col overflow-y-auto no-scrollbar">
-      {!isLoading &&
+      {!isLoadingAll &&
         episodes.map((episode, index) => (
           <div key={episode.id}>
-            <EpisodeItem {...episode} />
+            <EpisodeItem {...episode} progress={getEpisodeProgress(episode)} />
             {index !== episodes.length - 1 && (
               <Separator className="w-full bg-neutral-500" />
             )}
           </div>
         ))}
-      {isLoading && (
+      {isLoadingAll && (
         <div className="flex justify-center items-center w-full mt-10">
           <BarLoader className="min-w-[200px]" />
         </div>
