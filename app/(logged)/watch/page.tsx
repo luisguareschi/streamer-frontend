@@ -6,6 +6,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import { useApiShowsMovieRetrieve, useApiShowsTvRetrieve } from "@/api/api/api";
 import FullScreenLoading from "@/components/common/full-screen-loading";
 import { Suspense } from "react";
+import { usePlayerWatchProgress } from "@/hooks/usePlayerWatchProgress";
 
 const WatchPage = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const WatchPage = () => {
   const season = params.get("season");
   const episode = params.get("episode");
   const tmdbId = params.get("id");
+  const { watchProgress } = usePlayerWatchProgress();
 
   if (!tmdbId) {
     throw new Error("No ID");
