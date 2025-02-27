@@ -3,9 +3,13 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { MediaTypeEnum } from "@/api/baseAppBackendAPI.schemas";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
-import { useApiShowsMovieRetrieve, useApiShowsTvRetrieve } from "@/api/api/api";
+import {
+  useApiShowsMovieRetrieve,
+  useApiShowsTvRetrieve,
+  useApiShowWatchProgressCreate,
+} from "@/api/api/api";
 import FullScreenLoading from "@/components/common/full-screen-loading";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { usePlayerWatchProgress } from "@/hooks/usePlayerWatchProgress";
 
 const WatchPage = () => {
@@ -15,6 +19,7 @@ const WatchPage = () => {
   const season = params.get("season");
   const episode = params.get("episode");
   const tmdbId = params.get("id");
+  const { mutate: saveWatchProgress } = useApiShowWatchProgressCreate();
   const { watchProgress } = usePlayerWatchProgress();
 
   if (!tmdbId) {
@@ -64,6 +69,56 @@ const WatchPage = () => {
     mediaType === MediaTypeEnum.movie
       ? `https://vidlink.pro/movie/${tmdbId}`
       : `https://vidlink.pro/tv/${tmdbId}/${season}/${episode}`;
+
+  useEffect(() => {
+    if (watchProgress?.event !== "timeupdate") {
+      return;
+    }
+    if (!tmdbId || !mediaType || !title) {
+      return;
+    }
+
+    if (mediaType === MediaTypeEnum.movie && !movie) {
+      return;
+    }
+    if (mediaType === MediaTypeEnum.tv && !show) {
+      return;
+    }
+
+    if (watchProgress?.event === "timeupdate") {
+      saveWatchProgress({
+        data: {
+          media_type: mediaType,
+          tmdb_id: parseInt(tmdbId),
+          poster_path: show?.poster_path || movie?.poster_path || "",
+          backdrop_path: show?.backdrop_path || movie?.backdrop_path || "",
+          title: title,
+          tv_progress:
+            mediaType === MediaTypeEnum.tv
+              ? [
+                  {
+                    id: 0,
+                    season: parseInt(season || "-1"),
+                    episode: parseInt(episode || "-1"),
+                    watched_seconds: watchProgress.currentTime,
+                    total_seconds: watchProgress.duration,
+                  },
+                ]
+              : null,
+          movie_progress:
+            mediaType === MediaTypeEnum.movie
+              ? [
+                  {
+                    id: 0,
+                    watched_seconds: watchProgress.currentTime,
+                    total_seconds: watchProgress.duration,
+                  },
+                ]
+              : null,
+        },
+      });
+    }
+  }, [watchProgress]);
 
   if (isLoading) {
     return <FullScreenLoading />;

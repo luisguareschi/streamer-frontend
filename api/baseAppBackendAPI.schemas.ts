@@ -71,6 +71,30 @@ export interface User {
   email?: string;
 }
 
+export interface TvProgress {
+  readonly id: number;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   */
+  season?: number;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   */
+  episode?: number;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   */
+  watched_seconds?: number;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   */
+  total_seconds?: number;
+}
+
 export interface TvEpisodesResponse {
   _id: string;
   air_date: string;
@@ -204,6 +228,11 @@ export interface TokenRefresh {
   refresh: string;
 }
 
+/**
+ * @nullable
+ */
+export type ShowWatchProgressLastWatchedEpisode = TvProgress | null;
+
 export interface PatchedUser {
   readonly id?: number;
   /**
@@ -214,6 +243,73 @@ export interface PatchedUser {
   username?: string;
   /** @maxLength 254 */
   email?: string;
+}
+
+/**
+ * @nullable
+ */
+export type PatchedShowWatchProgressLastWatchedEpisode = TvProgress | null;
+
+export interface MovieProgress {
+  readonly id: number;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   */
+  watched_seconds?: number;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   */
+  total_seconds?: number;
+}
+
+export interface ShowWatchProgress {
+  readonly id: number;
+  readonly user: number;
+  media_type: MediaTypeEnum;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   */
+  tmdb_id: number;
+  /** @maxLength 255 */
+  poster_path: string;
+  /** @maxLength 255 */
+  backdrop_path: string;
+  /** @maxLength 255 */
+  title: string;
+  readonly created_at: string;
+  /** @nullable */
+  tv_progress: TvProgress[] | null;
+  /** @nullable */
+  movie_progress: MovieProgress[] | null;
+  /** @nullable */
+  readonly last_watched_episode: ShowWatchProgressLastWatchedEpisode;
+}
+
+export interface PatchedShowWatchProgress {
+  readonly id?: number;
+  readonly user?: number;
+  media_type?: MediaTypeEnum;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   */
+  tmdb_id?: number;
+  /** @maxLength 255 */
+  poster_path?: string;
+  /** @maxLength 255 */
+  backdrop_path?: string;
+  /** @maxLength 255 */
+  title?: string;
+  readonly created_at?: string;
+  /** @nullable */
+  tv_progress?: TvProgress[] | null;
+  /** @nullable */
+  movie_progress?: MovieProgress[] | null;
+  /** @nullable */
+  readonly last_watched_episode?: PatchedShowWatchProgressLastWatchedEpisode;
 }
 
 export type MovieDetailSpokenLanguagesItem = { [key: string]: unknown };

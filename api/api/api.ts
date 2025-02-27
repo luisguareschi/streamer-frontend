@@ -28,7 +28,9 @@ import type {
   ApiShowsTrendingRetrieveParams,
   EmailTokenObtain,
   MovieDetail,
+  PatchedShowWatchProgress,
   PatchedUser,
+  ShowWatchProgress,
   TokenRefresh,
   TrendingShowsResponse,
   TvDetail,
@@ -295,6 +297,569 @@ export const useApiAuthRegisterCreate = <
   >;
 }): UseMutationResult<TData, TError, { data: UserRegistration }, TContext> => {
   const mutationOptions = getApiAuthRegisterCreateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiShowWatchProgressList = (signal?: AbortSignal) => {
+  return customAxios<ShowWatchProgress[]>({
+    url: `/api/show-watch-progress/`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getApiShowWatchProgressListQueryKey = () => {
+  return [`/api/show-watch-progress/`] as const;
+};
+
+export const getApiShowWatchProgressListQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+      TError,
+      TData
+    >
+  >;
+}) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getApiShowWatchProgressListQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiShowWatchProgressList>>
+  > = ({ signal }) => apiShowWatchProgressList(signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiShowWatchProgressListQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowWatchProgressList>>
+>;
+export type ApiShowWatchProgressListQueryError = unknown;
+
+export function useApiShowWatchProgressList<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+  TError = unknown,
+>(options: {
+  query: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+        TError,
+        TData
+      >,
+      "initialData"
+    >;
+}): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiShowWatchProgressList<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+        TError,
+        TData
+      >,
+      "initialData"
+    >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiShowWatchProgressList<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+      TError,
+      TData
+    >
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiShowWatchProgressList<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof apiShowWatchProgressList>>,
+      TError,
+      TData
+    >
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowWatchProgressListQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const apiShowWatchProgressCreate = (
+  showWatchProgress: NonReadonly<ShowWatchProgress>,
+  signal?: AbortSignal,
+) => {
+  return customAxios<ShowWatchProgress>({
+    url: `/api/show-watch-progress/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: showWatchProgress,
+    signal,
+  });
+};
+
+export const getApiShowWatchProgressCreateMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressCreate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: NonReadonly<ShowWatchProgress> },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["apiShowWatchProgressCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiShowWatchProgressCreate>>,
+    { data: NonReadonly<ShowWatchProgress> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return apiShowWatchProgressCreate(data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { data: NonReadonly<ShowWatchProgress> },
+    TContext
+  >;
+};
+
+export type ApiShowWatchProgressCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowWatchProgressCreate>>
+>;
+export type ApiShowWatchProgressCreateMutationBody =
+  NonReadonly<ShowWatchProgress>;
+export type ApiShowWatchProgressCreateMutationError = unknown;
+
+export const useApiShowWatchProgressCreate = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressCreate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: NonReadonly<ShowWatchProgress> },
+    TContext
+  >;
+}): UseMutationResult<
+  TData,
+  TError,
+  { data: NonReadonly<ShowWatchProgress> },
+  TContext
+> => {
+  const mutationOptions = getApiShowWatchProgressCreateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiShowWatchProgressRetrieve = (
+  id: number,
+  signal?: AbortSignal,
+) => {
+  return customAxios<ShowWatchProgress>({
+    url: `/api/show-watch-progress/${id}/`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getApiShowWatchProgressRetrieveQueryKey = (id: number) => {
+  return [`/api/show-watch-progress/${id}/`] as const;
+};
+
+export const getApiShowWatchProgressRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+  TError = unknown,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getApiShowWatchProgressRetrieveQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>
+  > = ({ signal }) => apiShowWatchProgressRetrieve(id, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiShowWatchProgressRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>
+>;
+export type ApiShowWatchProgressRetrieveQueryError = unknown;
+
+export function useApiShowWatchProgressRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+  TError = unknown,
+>(
+  id: number,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiShowWatchProgressRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+  TError = unknown,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiShowWatchProgressRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+  TError = unknown,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiShowWatchProgressRetrieve<
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+  TError = unknown,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiShowWatchProgressRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiShowWatchProgressRetrieveQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const apiShowWatchProgressUpdate = (
+  id: number,
+  showWatchProgress: NonReadonly<ShowWatchProgress>,
+) => {
+  return customAxios<ShowWatchProgress>({
+    url: `/api/show-watch-progress/${id}/`,
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    data: showWatchProgress,
+  });
+};
+
+export const getApiShowWatchProgressUpdateMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { id: number; data: NonReadonly<ShowWatchProgress> },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["apiShowWatchProgressUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiShowWatchProgressUpdate>>,
+    { id: number; data: NonReadonly<ShowWatchProgress> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return apiShowWatchProgressUpdate(id, data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { id: number; data: NonReadonly<ShowWatchProgress> },
+    TContext
+  >;
+};
+
+export type ApiShowWatchProgressUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowWatchProgressUpdate>>
+>;
+export type ApiShowWatchProgressUpdateMutationBody =
+  NonReadonly<ShowWatchProgress>;
+export type ApiShowWatchProgressUpdateMutationError = unknown;
+
+export const useApiShowWatchProgressUpdate = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { id: number; data: NonReadonly<ShowWatchProgress> },
+    TContext
+  >;
+}): UseMutationResult<
+  TData,
+  TError,
+  { id: number; data: NonReadonly<ShowWatchProgress> },
+  TContext
+> => {
+  const mutationOptions = getApiShowWatchProgressUpdateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiShowWatchProgressPartialUpdate = (
+  id: number,
+  patchedShowWatchProgress: NonReadonly<PatchedShowWatchProgress>,
+) => {
+  return customAxios<ShowWatchProgress>({
+    url: `/api/show-watch-progress/${id}/`,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    data: patchedShowWatchProgress,
+  });
+};
+
+export const getApiShowWatchProgressPartialUpdateMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressPartialUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { id: number; data: NonReadonly<PatchedShowWatchProgress> },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["apiShowWatchProgressPartialUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiShowWatchProgressPartialUpdate>>,
+    { id: number; data: NonReadonly<PatchedShowWatchProgress> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return apiShowWatchProgressPartialUpdate(id, data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { id: number; data: NonReadonly<PatchedShowWatchProgress> },
+    TContext
+  >;
+};
+
+export type ApiShowWatchProgressPartialUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowWatchProgressPartialUpdate>>
+>;
+export type ApiShowWatchProgressPartialUpdateMutationBody =
+  NonReadonly<PatchedShowWatchProgress>;
+export type ApiShowWatchProgressPartialUpdateMutationError = unknown;
+
+export const useApiShowWatchProgressPartialUpdate = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressPartialUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { id: number; data: NonReadonly<PatchedShowWatchProgress> },
+    TContext
+  >;
+}): UseMutationResult<
+  TData,
+  TError,
+  { id: number; data: NonReadonly<PatchedShowWatchProgress> },
+  TContext
+> => {
+  const mutationOptions =
+    getApiShowWatchProgressPartialUpdateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiShowWatchProgressDestroy = (id: number) => {
+  return customAxios<void>({
+    url: `/api/show-watch-progress/${id}/`,
+    method: "DELETE",
+  });
+};
+
+export const getApiShowWatchProgressDestroyMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressDestroy>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: number }, TContext>;
+}) => {
+  const mutationKey = ["apiShowWatchProgressDestroy"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiShowWatchProgressDestroy>>,
+    { id: number }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return apiShowWatchProgressDestroy(id);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { id: number },
+    TContext
+  >;
+};
+
+export type ApiShowWatchProgressDestroyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowWatchProgressDestroy>>
+>;
+
+export type ApiShowWatchProgressDestroyMutationError = unknown;
+
+export const useApiShowWatchProgressDestroy = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressDestroy>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: number }, TContext>;
+}): UseMutationResult<TData, TError, { id: number }, TContext> => {
+  const mutationOptions =
+    getApiShowWatchProgressDestroyMutationOptions(options);
 
   return useMutation(mutationOptions);
 };
