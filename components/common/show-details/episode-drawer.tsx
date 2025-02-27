@@ -10,7 +10,6 @@ import { MediaTypeEnum, TvDetail } from "@/api/baseAppBackendAPI.schemas";
 import { MovieDetail } from "@/api/baseAppBackendAPI.schemas";
 import dayjs from "dayjs";
 import { X } from "lucide-react";
-import { useState } from "react";
 import { useApiShowsGetTvEpisodesRetrieve } from "@/api/api/api";
 import { EpisodeList, EpisodeListProps } from "./episode-list";
 import {
@@ -20,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { useRouter, useSearchParams } from "next/navigation";
 interface EpisodeDrawerProps {
   tv?: TvDetail;
   movie?: MovieDetail;
@@ -35,8 +34,10 @@ const Tag = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [seasonNumber, setSeasonNumber] = useState(1);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isOpen = searchParams.get("episodeDrawer") === "true";
+  const seasonNumber = Number(searchParams.get("seasonNumber") || "1");
   const { data: episodes, isLoading: isLoadingEpisodes } =
     useApiShowsGetTvEpisodesRetrieve(
       {
@@ -55,6 +56,18 @@ export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
   const mediaType = tv ? "tv" : "movie";
   const numberOfEpisodes = tv?.number_of_episodes || 1;
   const numberOfSeasons = tv?.number_of_seasons || 1;
+
+  const setIsOpen = (value: boolean) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("episodeDrawer", value.toString());
+    router.push(`?${params.toString()}`);
+  };
+
+  const setSeasonNumber = (value: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("seasonNumber", value.toString());
+    router.push(`?${params.toString()}`);
+  };
 
   const episodesList = (): EpisodeListProps["episodes"] => {
     if (movie) {
