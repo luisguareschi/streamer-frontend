@@ -264,6 +264,7 @@ export interface ShowWatchProgress {
   /** @maxLength 255 */
   title: string;
   readonly created_at: string;
+  readonly updated_at: string;
   /** @nullable */
   tv_progress: TvProgress[] | null;
   /** @nullable */
@@ -288,6 +289,7 @@ export interface PatchedShowWatchProgress {
   /** @maxLength 255 */
   title?: string;
   readonly created_at?: string;
+  readonly updated_at?: string;
   /** @nullable */
   tv_progress?: TvProgress[] | null;
   /** @nullable */
