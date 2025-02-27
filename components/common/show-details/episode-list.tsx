@@ -3,6 +3,7 @@ import { BarLoader } from "../bar-loader";
 import { MediaTypeEnum } from "@/api/baseAppBackendAPI.schemas";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
+import { getWatchUrl } from "@/lib/getWatchUrl";
 
 interface EpisodeItemProps {
   id: number;
@@ -29,13 +30,7 @@ const EpisodeItem = ({
   const releaseDateFormatted = dayjs(releaseDate).format("MMM D, YYYY");
 
   const handleClick = () => {
-    if (mediaType === MediaTypeEnum.movie) {
-      router.push(`/watch?mediaType=${mediaType}&id=${tmdbId}`);
-      return;
-    }
-    router.push(
-      `/watch?mediaType=${mediaType}&id=${tmdbId}&season=${season}&episode=${number}`,
-    );
+    router.push(getWatchUrl({ mediaType, tmdbId, season, episode: number }));
   };
 
   return (

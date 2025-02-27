@@ -9,6 +9,7 @@ import {
   ApiShowsTrendingRetrieveTimeWindow,
 } from "@/api/baseAppBackendAPI.schemas";
 import { TopPicksList } from "@/components/common/top-picks-list";
+import { ContinueWatchingList } from "@/components/common/continue-watching-list";
 
 const Home = () => {
   const { data: trendingShowsToday, isLoading: loadingTrendingShowsToday } =
@@ -43,6 +44,7 @@ const Home = () => {
         }))}
         isLoading={isLoading}
       />
+      <ContinueWatchingList />
       <HorizontalShowList
         title="Trending Today"
         shows={trendingShowsToday?.results?.map((show) => ({

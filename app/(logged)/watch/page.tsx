@@ -9,7 +9,7 @@ import {
   useApiShowWatchProgressCreate,
 } from "@/api/api/api";
 import FullScreenLoading from "@/components/common/full-screen-loading";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { usePlayerWatchProgress } from "@/hooks/usePlayerWatchProgress";
 
 const WatchPage = () => {
@@ -21,6 +21,7 @@ const WatchPage = () => {
   const tmdbId = params.get("id");
   const { mutate: saveWatchProgress } = useApiShowWatchProgressCreate();
   const { watchProgress } = usePlayerWatchProgress();
+  const lastUpdateRef = useRef<number>(0);
 
   if (!tmdbId) {
     throw new Error("No ID");
@@ -85,39 +86,44 @@ const WatchPage = () => {
       return;
     }
 
-    if (watchProgress?.event === "timeupdate") {
-      saveWatchProgress({
-        data: {
-          media_type: mediaType,
-          tmdb_id: parseInt(tmdbId),
-          poster_path: show?.poster_path || movie?.poster_path || "",
-          backdrop_path: show?.backdrop_path || movie?.backdrop_path || "",
-          title: title,
-          tv_progress:
-            mediaType === MediaTypeEnum.tv
-              ? [
-                  {
-                    id: 0,
-                    season: parseInt(season || "-1"),
-                    episode: parseInt(episode || "-1"),
-                    watched_seconds: watchProgress.currentTime,
-                    total_seconds: watchProgress.duration,
-                  },
-                ]
-              : null,
-          movie_progress:
-            mediaType === MediaTypeEnum.movie
-              ? [
-                  {
-                    id: 0,
-                    watched_seconds: watchProgress.currentTime,
-                    total_seconds: watchProgress.duration,
-                  },
-                ]
-              : null,
-        },
-      });
+    const TIME_BETWEEN_UPDATES = 30000; // seconds in milliseconds
+    const now = Date.now();
+    if (now - lastUpdateRef.current < TIME_BETWEEN_UPDATES) {
+      return;
     }
+    lastUpdateRef.current = now;
+
+    saveWatchProgress({
+      data: {
+        media_type: mediaType,
+        tmdb_id: parseInt(tmdbId),
+        poster_path: show?.poster_path || movie?.poster_path || "",
+        backdrop_path: show?.backdrop_path || movie?.backdrop_path || "",
+        title: title,
+        tv_progress:
+          mediaType === MediaTypeEnum.tv
+            ? [
+                {
+                  id: 0,
+                  season: parseInt(season || "-1"),
+                  episode: parseInt(episode || "-1"),
+                  watched_seconds: watchProgress.currentTime,
+                  total_seconds: watchProgress.duration,
+                },
+              ]
+            : null,
+        movie_progress:
+          mediaType === MediaTypeEnum.movie
+            ? [
+                {
+                  id: 0,
+                  watched_seconds: watchProgress.currentTime,
+                  total_seconds: watchProgress.duration,
+                },
+              ]
+            : null,
+      },
+    });
   }, [watchProgress]);
 
   if (isLoading) {
