@@ -7,7 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { getWatchUrl } from "@/lib/getWatchUrl";
-import { Info } from "lucide-react";
+import { Info, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -29,6 +29,12 @@ const ContinueWatchingCard = ({ show }: { show: ShowWatchProgress }) => {
     router.push(
       `/show/${show.tmdb_id}?mediaType=${show.media_type}&episodeDrawer=true&seasonNumber=${show.last_watched_episode?.season}`,
     );
+  };
+
+  const handleRemoveClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    alert("Not implemented");
   };
 
   return (
@@ -66,6 +72,14 @@ const ContinueWatchingCard = ({ show }: { show: ShowWatchProgress }) => {
         onClick={handleInfoClick}
       >
         <Info className="min-w-5 min-h-5" />
+      </Button>
+      <Button
+        variant="glass"
+        size="icon"
+        className="absolute top-1 right-1 size-8 bg-transparent backdrop-blur-0 rounded-full"
+        onClick={handleRemoveClick}
+      >
+        <X className="min-w-5 min-h-5" />
       </Button>
     </Link>
   );
