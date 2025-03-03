@@ -4,11 +4,15 @@ import {
   MediaTypeEnum,
   ShowWatchProgress,
 } from "@/api/baseAppBackendAPI.schemas";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { getWatchUrl } from "@/lib/getWatchUrl";
+import { Info } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const ContinueWatchingCard = ({ show }: { show: ShowWatchProgress }) => {
+  const router = useRouter();
   const totalSeconds =
     show.last_watched_episode?.total_seconds ||
     show.movie_progress?.[0]?.total_seconds ||
@@ -18,6 +22,14 @@ const ContinueWatchingCard = ({ show }: { show: ShowWatchProgress }) => {
     show.movie_progress?.[0]?.watched_seconds ||
     0;
   const minutesLeft = Math.floor((totalSeconds - watchedSeconds) / 60);
+
+  const handleInfoClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(
+      `/show/${show.tmdb_id}?mediaType=${show.media_type}&episodeDrawer=true&seasonNumber=${show.last_watched_episode?.season}`,
+    );
+  };
 
   return (
     <Link
@@ -47,6 +59,14 @@ const ContinueWatchingCard = ({ show }: { show: ShowWatchProgress }) => {
         value={(watchedSeconds / totalSeconds) * 100}
         className="h-1 bg-opacity-50 backdrop-blur-sm mt-2"
       />
+      <Button
+        variant="glass"
+        size="icon"
+        className="absolute top-1 left-1 size-8 bg-transparent backdrop-blur-0 rounded-full"
+        onClick={handleInfoClick}
+      >
+        <Info className="min-w-5 min-h-5" />
+      </Button>
     </Link>
   );
 };
