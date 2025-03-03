@@ -29,7 +29,8 @@ export const usePlatform = (): PlatformInfo => {
       const userAgent = window.navigator.userAgent.toLowerCase();
       const isAndroid = /android/.test(userAgent);
       const isIOS = /iphone|ipad|ipod/.test(userAgent);
-      const isWebview = /webview/.test(userAgent);
+      // @ts-ignore
+      const isWebview = !!window?.isRNWebView;
 
       setPlatformInfo({
         isPWA,
