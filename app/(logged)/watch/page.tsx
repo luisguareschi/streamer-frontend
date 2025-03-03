@@ -171,7 +171,11 @@ const WatchPage = () => {
       >
         <Button
           variant="glass"
-          onClick={() => router.back()}
+          onClick={() =>
+            router.replace(
+              `/show/${tmdbId}?mediaType=${mediaType}&episodeDrawer=true&seasonNumber=${season}`,
+            )
+          }
           className="bg-transparent px-3 text-base"
           size="xl"
         >

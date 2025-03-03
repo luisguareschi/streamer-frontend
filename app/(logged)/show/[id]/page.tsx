@@ -10,6 +10,15 @@ const ShowDetailPage = () => {
   const { id } = useParams();
   const searchParams = useSearchParams();
   const mediaType = searchParams.get("mediaType") as MediaTypeEnum;
+
+  if (!mediaType) {
+    throw new Error("Media type is required");
+  }
+
+  if (!Object.values(MediaTypeEnum).includes(mediaType)) {
+    throw new Error("Invalid media type");
+  }
+
   const { data: movie, isLoading: isMovieLoading } = useApiShowsMovieRetrieve(
     id as string,
     {
