@@ -6,6 +6,7 @@ interface PlatformInfo {
   isPWA: boolean;
   isAndroid: boolean;
   isIOS: boolean;
+  isWebview: boolean;
 }
 
 export const usePlatform = (): PlatformInfo => {
@@ -13,6 +14,7 @@ export const usePlatform = (): PlatformInfo => {
     isPWA: false,
     isAndroid: false,
     isIOS: false,
+    isWebview: false,
   });
 
   useEffect(() => {
@@ -27,11 +29,13 @@ export const usePlatform = (): PlatformInfo => {
       const userAgent = window.navigator.userAgent.toLowerCase();
       const isAndroid = /android/.test(userAgent);
       const isIOS = /iphone|ipad|ipod/.test(userAgent);
+      const isWebview = /webview/.test(userAgent);
 
       setPlatformInfo({
         isPWA,
         isAndroid,
         isIOS,
+        isWebview,
       });
     };
 

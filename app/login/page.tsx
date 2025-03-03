@@ -54,7 +54,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen justify-center items-center w-full p-4 max-w-xl mx-auto">
+    <div className="flex flex-col h-screen justify-center items-center w-full p-4 max-w-xl mx-auto pb-10">
       <form
         className="flex flex-col gap-4 w-full"
         onSubmit={(e) => {

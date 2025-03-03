@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const WelcomePage = () => {
   return (
-    <div className="flex flex-col items-center justify-end h-screen text-white p-4 gap-4 md:justify-center">
+    <div className="flex flex-col items-center justify-end h-screen text-white p-4 gap-4 md:justify-center pb-10">
       <img
         src="https://preview.redd.it/2jhtmqhg4mo81.png?width=1920&format=png&auto=webp&s=0d41709c3c478d2bcadfd8f2450271f175c0676f"
         alt="Streamer Logo"

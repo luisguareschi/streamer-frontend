@@ -28,7 +28,10 @@ const NavbarItem = ({ icon, href, onClick }: NavbarItemProps) => {
 };
 
 export const Navbar = () => {
-  const { isIOS, isPWA } = usePlatform();
+  const { isIOS, isPWA, isWebview } = usePlatform();
+
+  const showExtraPadding = (isIOS && isPWA) || isWebview;
+
   const items: NavbarItemProps[] = [
     {
       icon: <HomeIcon />,
@@ -52,7 +55,7 @@ export const Navbar = () => {
     <div
       className={cn(
         "fixed bottom-0 left-0 w-screen h-20 bg-black bg-opacity-30 backdrop-blur-lg grid grid-cols-4 justify-items-center items-center",
-        isIOS && isPWA && "pb-6 h-24",
+        showExtraPadding && "pb-6 h-24",
       )}
     >
       {items.map((item) => (

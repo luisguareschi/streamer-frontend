@@ -45,7 +45,7 @@ const ShowDetailPage = () => {
       />
       <div className="fixed top-0 left-0 z-10 h-[100vh] w-full bottom-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent" />
 
-      <div className="flex flex-col justify-between min-h-[100vh] relative z-20 p-4">
+      <div className="flex flex-col justify-between min-h-[100vh] relative z-20 p-4 pb-10">
         <Header />
         <AboutCard
           title={movie?.title || show?.name || ""}
