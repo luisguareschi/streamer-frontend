@@ -34,10 +34,10 @@ const ContinueWatchingCard = ({ show }: { show: ShowWatchProgress }) => {
         alt={show.title}
         className="absolute top-0 left-0 w-full h-full object-cover brightness-75 active:scale-110 transition-all"
       />
-      <p className="text-sm text-neutral-300 relative z-10">
+      <p className="text-sm text-neutral-300 relative">
         {minutesLeft} min left
       </p>
-      <h1 className="text-lg text-white font-medium relative z-10">
+      <h1 className="text-lg text-white font-medium relative">
         {show.title}
         {" - "}
         {show.media_type === MediaTypeEnum.tv &&
