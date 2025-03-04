@@ -107,7 +107,8 @@ export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
         </Button>
       </DrawerTrigger>
       <DrawerContent
-        className="h-[100vh] bg-neutral-400/10 backdrop-blur-lg border-none rounded-none p-4 flex flex-col gap-6"
+        className="h-[100vh] bg-neutral-400/10 backdrop-blur-lg border-none rounded-none p-4 flex flex-col gap-6 
+        sm:max-w-2xl sm:p-10 sm:mx-auto"
         showPill={false}
       >
         <DrawerClose asChild onClick={() => setIsOpen(false)}>
