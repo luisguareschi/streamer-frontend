@@ -189,7 +189,7 @@ const WatchPage = () => {
       <iframe
         src={url}
         allowFullScreen
-        className="w-full aspect-video"
+        className="w-full aspect-video lg:w-2/3 lg:border-2 lg:border-gray-800 lg:rounded-lg"
         referrerPolicy="no-referrer"
         allow="autoplay; encrypted-media"
       />
