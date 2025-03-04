@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
 import { useApiShowWatchProgressList } from "@/api/api/api";
 import {
   MediaTypeEnum,
@@ -7,12 +8,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { getWatchUrl } from "@/lib/getWatchUrl";
+import { QUERYKEYS } from "@/queries/queryKeys";
 import { Info, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ArchiveShowModal } from "@/components/common/archive-show-modal";
 
 const ContinueWatchingCard = ({ show }: { show: ShowWatchProgress }) => {
   const router = useRouter();
+  const [archiveShowModalOpen, setArchiveShowModalOpen] = useState(false);
   const totalSeconds =
     show.last_watched_episode?.total_seconds ||
     show.movie_progress?.[0]?.total_seconds ||
@@ -34,60 +39,68 @@ const ContinueWatchingCard = ({ show }: { show: ShowWatchProgress }) => {
   const handleRemoveClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    alert("Not implemented");
+    setArchiveShowModalOpen(true);
   };
 
   return (
-    <Link
-      href={getWatchUrl({
-        mediaType: show.media_type,
-        tmdbId: show.tmdb_id,
-        season: show.last_watched_episode?.season,
-        episode: show.last_watched_episode?.episode,
-      })}
-      className="flex flex-col justify-end gap-0 aspect-video rounded-xl min-w-[300px] relative p-4 overflow-hidden"
-    >
-      <img
-        src={show.backdrop_path}
-        alt={show.title}
-        className="absolute top-0 left-0 w-full h-full object-cover brightness-75 active:scale-110 transition-all"
-      />
-      <p className="text-sm text-neutral-300 relative">
-        {minutesLeft} min left
-      </p>
-      <h1 className="text-lg text-white font-medium relative">
-        {show.title}
-        {" - "}
-        {show.media_type === MediaTypeEnum.tv &&
-          `S${show.last_watched_episode?.season}E${show.last_watched_episode?.episode}`}
-      </h1>
-      <Progress
-        value={(watchedSeconds / totalSeconds) * 100}
-        className="h-1 bg-opacity-50 backdrop-blur-sm mt-2"
-      />
-      <Button
-        variant="glass"
-        size="icon"
-        className="absolute top-1 left-1 size-8 bg-transparent backdrop-blur-0 rounded-full"
-        onClick={handleInfoClick}
+    <>
+      <Link
+        href={getWatchUrl({
+          mediaType: show.media_type,
+          tmdbId: show.tmdb_id,
+          season: show.last_watched_episode?.season,
+          episode: show.last_watched_episode?.episode,
+        })}
+        className="flex flex-col justify-end gap-0 aspect-video rounded-xl min-w-[300px] relative p-4 overflow-hidden"
       >
-        <Info className="min-w-5 min-h-5" />
-      </Button>
-      <Button
-        variant="glass"
-        size="icon"
-        className="absolute top-1 right-1 size-8 bg-transparent backdrop-blur-0 rounded-full"
-        onClick={handleRemoveClick}
-      >
-        <X className="min-w-5 min-h-5" />
-      </Button>
-    </Link>
+        <img
+          src={show.backdrop_path}
+          alt={show.title}
+          className="absolute top-0 left-0 w-full h-full object-cover brightness-75 active:scale-110 transition-all"
+        />
+        <p className="text-sm text-neutral-300 relative">
+          {minutesLeft} min left
+        </p>
+        <h1 className="text-lg text-white font-medium relative">
+          {show.title}
+          {" - "}
+          {show.media_type === MediaTypeEnum.tv &&
+            `S${show.last_watched_episode?.season}E${show.last_watched_episode?.episode}`}
+        </h1>
+        <Progress
+          value={(watchedSeconds / totalSeconds) * 100}
+          className="h-1 bg-opacity-50 backdrop-blur-sm mt-2"
+        />
+        <Button
+          variant="glass"
+          size="icon"
+          className="absolute top-1 left-1 size-8 bg-transparent backdrop-blur-none rounded-full"
+          onClick={handleInfoClick}
+        >
+          <Info className="min-w-5 min-h-5" />
+        </Button>
+        <Button
+          variant="glass"
+          size="icon"
+          className="absolute top-1 right-1 size-8 bg-transparent backdrop-blur-none rounded-full"
+          onClick={handleRemoveClick}
+        >
+          <X className="min-w-5 min-h-5" />
+        </Button>
+      </Link>
+      <ArchiveShowModal
+        tmdbId={show.tmdb_id}
+        open={archiveShowModalOpen}
+        onClose={() => setArchiveShowModalOpen(false)}
+      />
+    </>
   );
 };
 
 export const ContinueWatchingList = () => {
   const { data: shows, isLoading } = useApiShowWatchProgressList({
     query: {
+      queryKey: [QUERYKEYS.continueWatchingList],
       refetchOnMount: true,
       refetchOnWindowFocus: true,
       refetchInterval: 1000 * 60 * 5, // 5 minutes

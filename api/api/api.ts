@@ -26,6 +26,7 @@ import type {
   ApiShowsPopularRetrieveParams,
   ApiShowsSearchRetrieveParams,
   ApiShowsTrendingRetrieveParams,
+  ArchiveShow,
   EmailTokenObtain,
   MovieDetail,
   PatchedShowWatchProgress,
@@ -860,6 +861,70 @@ export const useApiShowWatchProgressDestroy = <
 }): UseMutationResult<TData, TError, { id: number }, TContext> => {
   const mutationOptions =
     getApiShowWatchProgressDestroyMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiShowWatchProgressArchiveShowCreate = (
+  archiveShow: ArchiveShow,
+  signal?: AbortSignal,
+) => {
+  return customAxios<ShowWatchProgress>({
+    url: `/api/show-watch-progress/archive_show/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: archiveShow,
+    signal,
+  });
+};
+
+export const getApiShowWatchProgressArchiveShowCreateMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressArchiveShowCreate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { data: ArchiveShow }, TContext>;
+}) => {
+  const mutationKey = ["apiShowWatchProgressArchiveShowCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiShowWatchProgressArchiveShowCreate>>,
+    { data: ArchiveShow }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return apiShowWatchProgressArchiveShowCreate(data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { data: ArchiveShow },
+    TContext
+  >;
+};
+
+export type ApiShowWatchProgressArchiveShowCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiShowWatchProgressArchiveShowCreate>>
+>;
+export type ApiShowWatchProgressArchiveShowCreateMutationBody = ArchiveShow;
+export type ApiShowWatchProgressArchiveShowCreateMutationError = unknown;
+
+export const useApiShowWatchProgressArchiveShowCreate = <
+  TData = Awaited<ReturnType<typeof apiShowWatchProgressArchiveShowCreate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { data: ArchiveShow }, TContext>;
+}): UseMutationResult<TData, TError, { data: ArchiveShow }, TContext> => {
+  const mutationOptions =
+    getApiShowWatchProgressArchiveShowCreateMutationOptions(options);
 
   return useMutation(mutationOptions);
 };

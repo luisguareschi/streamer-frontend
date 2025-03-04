@@ -271,6 +271,7 @@ export interface ShowWatchProgress {
   movie_progress: MovieProgress[] | null;
   /** @nullable */
   readonly last_watched_episode: ShowWatchProgressLastWatchedEpisode;
+  archived?: boolean;
 }
 
 export interface PatchedShowWatchProgress {
@@ -296,6 +297,7 @@ export interface PatchedShowWatchProgress {
   movie_progress?: MovieProgress[] | null;
   /** @nullable */
   readonly last_watched_episode?: PatchedShowWatchProgressLastWatchedEpisode;
+  archived?: boolean;
 }
 
 export type MovieDetailSpokenLanguagesItem = { [key: string]: unknown };
@@ -308,19 +310,6 @@ export type MovieDetailProductionCompaniesItem = { [key: string]: unknown };
  * @nullable
  */
 export type MovieDetailBelongsToCollection = unknown | null;
-
-/**
- * * `tv` - tv
- * `movie` - movie
- */
-export enum MediaTypeEnum {
-  tv = "tv",
-  movie = "movie",
-}
-export interface Genre {
-  id: number;
-  name: string;
-}
 
 export interface MovieDetail {
   adult: boolean;
@@ -354,7 +343,24 @@ export interface MovieDetail {
   vote_count: number;
 }
 
+/**
+ * * `tv` - tv
+ * `movie` - movie
+ */
+export enum MediaTypeEnum {
+  tv = "tv",
+  movie = "movie",
+}
+export interface Genre {
+  id: number;
+  name: string;
+}
+
 export interface EmailTokenObtain {
   email: string;
   password: string;
+}
+
+export interface ArchiveShow {
+  tmdb_id: number;
 }
