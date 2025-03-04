@@ -21,7 +21,7 @@ export const TopPicksList = ({ shows, isLoading }: TopPicksListProps) => {
   }, [shows]);
 
   return (
-    <div className="flex flex-col gap-10 p-4 pb-10 relative -ml-4">
+    <div className="flex flex-col gap-10 p-4 pb-10 relative -ml-4 sm:hidden">
       {!isLoading && (
         <div className="absolute top-0 left-0 w-screen h-full overflow-hidden">
           <img

@@ -8,7 +8,7 @@ const ProfilePage = () => {
   const { logout } = useLogout();
   const { user } = useCurrentUser();
   return (
-    <div className="flex flex-col gap-4 p-4 w-full h-full pb-28 overflow-y-auto no-scrollbar">
+    <div className="flex flex-col gap-4 p-4 w-full h-full pb-28 overflow-y-auto no-scrollbar sm:pt-20">
       <h1 className="text-2xl font-medium text-white mb-20">
         Profile Settings
       </h1>
@@ -25,7 +25,7 @@ const ProfilePage = () => {
         variant="roundedWhite"
         onClick={() => logout()}
         size="xl"
-        className="mt-auto"
+        className="mt-auto sm:w-fit sm:mt-0 sm:mx-auto"
       >
         Logout
       </Button>

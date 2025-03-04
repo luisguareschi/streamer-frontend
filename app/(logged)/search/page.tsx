@@ -31,22 +31,21 @@ const SearchPage = () => {
   const isLoading = isTrendingLoading || isSearchLoading;
 
   return (
-    <div className="flex flex-col px-4 gap-4 h-full pb-28 overflow-y-auto no-scrollbar">
-      <header className="sticky top-0 bg-black py-4">
+    <div className="flex flex-col px-4 gap-4 h-full pb-28 overflow-y-auto no-scrollbar sm:mt-16">
+      <h1 className="hidden sm:block text-white text-2xl font-semibold text-center mb-5 mt-20">
+        Search for your favorite shows
+      </h1>
+      <header className="sticky top-0 bg-black py-4 sm:mb-20">
         <Input
           variant="neutral"
           placeholder="Search"
           value={searchQuery}
+          className="sm:w-[500px] sm:mx-auto"
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </header>
       {!!data?.results.length && !isLoading && (
-        <div
-          className="grid grid-cols-2 gap-4"
-          style={{
-            gridTemplateColumns: "repeat(auto-fill, minmax(40vw, 1fr))",
-          }}
-        >
+        <div className="grid gap-4 grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8">
           {data?.results.map((result) => (
             <VerticalShowCard
               id={result.id}

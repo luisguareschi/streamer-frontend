@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 export const Header = () => {
   const router = useRouter();
   return (
-    <div className="flex justify-between items-start">
+    <div className="flex justify-between items-start sm:fixed sm:top-0 sm:left-0 sm:w-full sm:p-4">
       <Button
         variant="glass"
         size="icon"

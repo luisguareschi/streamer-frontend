@@ -38,7 +38,10 @@ export const AboutCard = ({
   }, [description]);
 
   return (
-    <div className="flex flex-col gap-2 z-10 bg-neutral-200/30 backdrop-blur-md p-6 rounded-3xl">
+    <div
+      className="flex flex-col gap-2 z-10 bg-neutral-200/30 backdrop-blur-md p-6 rounded-3xl sm:max-w-lg sm:p-10 
+    sm:min-w-[512px]"
+    >
       <h1 className="text-3xl font-bold text-white">{title}</h1>
       <div className="flex flex-wrap gap-2">
         {genres.map((genre, index) => (
