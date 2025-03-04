@@ -34,7 +34,7 @@ const EpisodeItem = ({
   const releaseDateFormatted = dayjs(releaseDate).format("MMM D, YYYY");
 
   const handleClick = () => {
-    router.push(getWatchUrl({ mediaType, tmdbId, season, episode: number }));
+    router.replace(getWatchUrl({ mediaType, tmdbId, season, episode: number }));
   };
 
   return (
