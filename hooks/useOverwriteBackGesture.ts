@@ -4,21 +4,48 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-export const useOverwriteBackGesture = (callback?: () => void) => {
+interface UseOverwriteBackGestureProps {
+  callback?: () => void;
+  enabled?: boolean;
+  timesToPushState?: number;
+}
+
+/**
+ * A hook that overrides the browser's back gesture/button behavior.
+ *
+ * This hook manipulates the browser history to prevent users from navigating back using gestures or the back button.
+ * Instead, it executes a custom callback function when a back navigation is attempted.
+ *
+ * @param  props - The hook's configuration options
+ * @param props.callback - Function to execute when back navigation is attempted
+ * @param props.enabled - Whether the back gesture override is enabled (default: true)
+ * @param props.timesToPushState - Number of history states to push to prevent back navigation (default: 3)
+ *
+ * @example
+ * useOverwriteBackGesture({
+ *   callback: () => router.push('/home'),
+ *   enabled: true
+ *   timesToPushState: 3
+ * });
+ */
+
+export const useOverwriteBackGesture = ({
+  callback,
+  enabled = true,
+  timesToPushState = 3,
+}: UseOverwriteBackGestureProps) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    const enabled = true;
-
     if (enabled) {
       // Disable the back gesture by manipulating the history
-      window.history.pushState(null, "", window.location.href);
-      window.history.pushState(null, "", window.location.href);
-      window.history.pushState(null, "", window.location.href);
+      for (let i = 0; i < timesToPushState; i++) {
+        window.history.pushState(null, "", window.location.href);
+      }
       window.onpopstate = () => {
-        window.history.pushState(null, "", window.location.href);
-        window.history.pushState(null, "", window.location.href);
-        window.history.pushState(null, "", window.location.href);
+        for (let i = 0; i < timesToPushState; i++) {
+          window.history.pushState(null, "", window.location.href);
+        }
       };
     } else {
       // Re-enable the back gesture for other routes
