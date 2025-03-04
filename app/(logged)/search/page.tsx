@@ -31,11 +31,11 @@ const SearchPage = () => {
   const isLoading = isTrendingLoading || isSearchLoading;
 
   return (
-    <div className="flex flex-col px-4 gap-4 h-full pb-28 overflow-y-auto no-scrollbar sm:mt-16">
-      <h1 className="hidden sm:block text-white text-2xl font-semibold text-center mb-5 mt-20">
-        Search for your favorite shows
-      </h1>
-      <header className="sticky top-0 bg-black py-4 sm:mb-20">
+    <div className="flex flex-col px-4 gap-4 h-full pb-28 overflow-y-auto no-scrollbar">
+      <header className="sticky top-0 bg-black py-4 sm:mb-20 sm:mt-40">
+        <h1 className="hidden sm:block text-white text-2xl font-semibold text-center mb-10">
+          Search for your favorite shows
+        </h1>
         <Input
           variant="neutral"
           placeholder="Search"
