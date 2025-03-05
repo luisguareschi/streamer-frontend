@@ -10,7 +10,7 @@ interface AdblockBannerProps {
 }
 
 export const AdblockBanner = ({ show = true }: AdblockBannerProps) => {
-  const [startDetection, setStartDetection] = useState(false);
+  const [startDetection, setStartDetection] = useState(true);
   const [hasAdblocker, setHasAdblocker] = useState(false);
   const { isIOS, isAndroid } = usePlatform();
   const hasAdBlock1 = useDetectAdBlock();
