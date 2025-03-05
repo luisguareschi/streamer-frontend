@@ -1638,6 +1638,11 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.10.4.tgz#427d5549943a9c6fce808e39ea64dbe60d4047f1"
   integrity sha512-WJgX9nzTqknM393q1QJDJmoW28kUfEnybeTfVNcNAPnIx210RXm2DiXiHzfNPJNIUUb1tJnz/l4QGtJ30PgWmA==
 
+"@scthakuri/adblock-detector@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@scthakuri/adblock-detector/-/adblock-detector-1.0.7.tgz#d85d073c9f0b9b86efa3fe66931133741401459d"
+  integrity sha512-D5u+uOlm7QerBQJ5S3XWtq91J3rDVFPnjl2mJIPsr7tPOpVnsGsqi8ZbHvTpBUa9BOQzkQAbYbyRIQtYbghOVw==
+
 "@shikijs/core@1.29.2":
   version "1.29.2"
   resolved "https://registry.yarnpkg.com/@shikijs/core/-/core-1.29.2.tgz#9c051d3ac99dd06ae46bd96536380c916e552bf3"

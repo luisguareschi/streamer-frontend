@@ -2,17 +2,30 @@ import { Info, Link as LinkIcon } from "lucide-react";
 import { useDetectAdBlock } from "adblock-detect-react";
 import Link from "next/link";
 import { usePlatform } from "@/hooks/usePlatform";
+import { DetectAdblock } from "@scthakuri/adblock-detector";
+import { useEffect, useState } from "react";
 
 interface AdblockBannerProps {
   show?: boolean;
 }
 
 export const AdblockBanner = ({ show = true }: AdblockBannerProps) => {
+  const [startDetection, setStartDetection] = useState(false);
+  const [hasAdblocker, setHasAdblocker] = useState(false);
   const { isIOS, isAndroid } = usePlatform();
-  const hasAdblocker = useDetectAdBlock();
+  const hasAdBlock1 = useDetectAdBlock();
+
   const adGuardLink =
     "https://apps.apple.com/us/app/adguard-adblock-privacy/id1047223162";
   const adBlockPlusLink = "https://adblockplus.org/";
+
+  useEffect(() => {
+    if (!startDetection) return;
+    DetectAdblock((enabled) => {
+      setHasAdblocker(enabled || hasAdBlock1);
+      setStartDetection(false);
+    });
+  }, [startDetection]);
 
   if (!show || hasAdblocker) return null;
 
