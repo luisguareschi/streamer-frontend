@@ -51,7 +51,7 @@ const ContinueWatchingCard = ({ show }: { show: ShowWatchProgress }) => {
           season: show.last_watched_episode?.season,
           episode: show.last_watched_episode?.episode,
         })}
-        className="flex flex-col justify-end gap-0 aspect-video rounded-xl min-w-[300px] relative p-4 overflow-hidden"
+        className="flex flex-col justify-end gap-0 aspect-video rounded-xl min-w-[300px] relative p-4 overflow-hidden sm:min-w-[350px]"
       >
         <img
           src={show.backdrop_path}

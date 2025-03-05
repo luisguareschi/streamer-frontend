@@ -67,7 +67,7 @@ export const Navbar = () => {
   return (
     <div
       className={cn(
-        "fixed bottom-0 left-0 w-screen h-20 bg-black bg-opacity-30 backdrop-blur-lg grid grid-cols-4 sm:flex sm:gap-0 sm:px-6 justify-items-center items-center sm:top-0",
+        "fixed bottom-0 left-0 w-screen h-20 bg-black bg-opacity-30 backdrop-blur-lg grid grid-cols-4 sm:flex sm:gap-0 sm:px-6 justify-items-center items-center sm:top-0 sm:z-10",
         showExtraPadding && "pb-6 h-24",
       )}
     >

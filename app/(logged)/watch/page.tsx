@@ -162,7 +162,7 @@ const WatchPage = () => {
   }
 
   return (
-    <div className="fixed top-0 left-0 bg-black flex flex-col h-full w-full justify-center items-center z-10">
+    <div className="fixed top-0 left-0 bg-black flex flex-col h-full w-full justify-center items-center z-20">
       <div
         className="absolute top-0 left-0 p-4 w-full grid justify-items-start items-center gap-2"
         style={{

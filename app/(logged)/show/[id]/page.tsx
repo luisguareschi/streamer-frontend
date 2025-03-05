@@ -45,7 +45,7 @@ const ShowDetailPage = () => {
   }
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full z-10 flex flex-col bg-black overflow-y-auto">
+    <div className="fixed top-0 left-0 w-full h-full z-20 flex flex-col bg-black overflow-y-auto">
       <div
         className="w-full h-full bg-cover bg-center z-10 fixed top-0 left-0"
         style={{

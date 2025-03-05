@@ -7,6 +7,8 @@ export interface TopPickCardProps {
   id: number;
   mediaType?: MediaTypeEnum;
   isLoading?: boolean;
+  backdropUrl: string;
+  title: string;
 }
 
 export const TopPickCard = ({

@@ -41,6 +41,8 @@ const Home = () => {
           imgUrl: show.poster_path || "",
           id: show.id,
           mediaType: show.media_type,
+          backdropUrl: show.backdrop_path || "",
+          title: show.title || show.name || "",
         }))}
         isLoading={isLoading}
       />
