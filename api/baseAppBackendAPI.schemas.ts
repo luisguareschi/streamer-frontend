@@ -47,6 +47,25 @@ export type ApiShowsGetTvEpisodesRetrieveParams = {
   tv_id: number;
 };
 
+export interface Watchlist {
+  readonly id: number;
+  media_type: MediaTypeEnum;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   */
+  tmdb_id: number;
+  /** @maxLength 255 */
+  poster_path: string;
+  /** @maxLength 255 */
+  backdrop_path: string;
+  /** @maxLength 255 */
+  title: string;
+  readonly created_at: string;
+  readonly updated_at: string;
+  readonly user: number;
+}
+
 export interface UserRegistration {
   /**
    * Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
@@ -87,19 +106,6 @@ export interface TvProgress {
   total_seconds?: number;
 }
 
-export interface TvEpisodesResponse {
-  _id: string;
-  air_date: string;
-  episodes: TvEpisode[];
-  name: string;
-  overview: string;
-  id: number;
-  /** @nullable */
-  poster_path: string | null;
-  season_number: number;
-  vote_average: number;
-}
-
 export type TvEpisodeGuestStarsItem = { [key: string]: unknown };
 
 export type TvEpisodeCrewItem = { [key: string]: unknown };
@@ -120,6 +126,19 @@ export interface TvEpisode {
   vote_count: number;
   crew: TvEpisodeCrewItem[];
   guest_stars: TvEpisodeGuestStarsItem[];
+}
+
+export interface TvEpisodesResponse {
+  _id: string;
+  air_date: string;
+  episodes: TvEpisode[];
+  name: string;
+  overview: string;
+  id: number;
+  /** @nullable */
+  poster_path: string | null;
+  season_number: number;
+  vote_average: number;
 }
 
 export type TvDetailSpokenLanguagesItem = { [key: string]: unknown };
@@ -224,6 +243,25 @@ export interface TokenRefresh {
  * @nullable
  */
 export type ShowWatchProgressLastWatchedEpisode = TvProgress | null;
+
+export interface PatchedWatchlist {
+  readonly id?: number;
+  media_type?: MediaTypeEnum;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   */
+  tmdb_id?: number;
+  /** @maxLength 255 */
+  poster_path?: string;
+  /** @maxLength 255 */
+  backdrop_path?: string;
+  /** @maxLength 255 */
+  title?: string;
+  readonly created_at?: string;
+  readonly updated_at?: string;
+  readonly user?: number;
+}
 
 export interface PatchedUser {
   readonly id?: number;
@@ -351,6 +389,14 @@ export enum MediaTypeEnum {
   tv = "tv",
   movie = "movie",
 }
+export interface IsInWatchlistResponse {
+  is_in_watchlist: boolean;
+}
+
+export interface IsInWatchlist {
+  tmdb_id: number;
+}
+
 export interface Genre {
   id: number;
   name: string;

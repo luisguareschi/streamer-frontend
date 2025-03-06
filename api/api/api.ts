@@ -28,9 +28,12 @@ import type {
   ApiShowsTrendingRetrieveParams,
   ArchiveShow,
   EmailTokenObtain,
+  IsInWatchlist,
+  IsInWatchlistResponse,
   MovieDetail,
   PatchedShowWatchProgress,
   PatchedUser,
+  PatchedWatchlist,
   ShowWatchProgress,
   TokenRefresh,
   TrendingShowsResponse,
@@ -38,6 +41,7 @@ import type {
   TvEpisodesResponse,
   User,
   UserRegistration,
+  Watchlist,
 } from "../baseAppBackendAPI.schemas";
 import { customAxios } from "../../lib/axiosInstance";
 
@@ -3025,3 +3029,610 @@ export function useApiUsersMeRetrieve<
 
   return query;
 }
+
+export const apiWatchlistList = (signal?: AbortSignal) => {
+  return customAxios<Watchlist[]>({
+    url: `/api/watchlist/`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getApiWatchlistListQueryKey = () => {
+  return [`/api/watchlist/`] as const;
+};
+
+export const getApiWatchlistListQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiWatchlistList>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof apiWatchlistList>>, TError, TData>
+  >;
+}) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getApiWatchlistListQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiWatchlistList>>
+  > = ({ signal }) => apiWatchlistList(signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiWatchlistList>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiWatchlistListQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiWatchlistList>>
+>;
+export type ApiWatchlistListQueryError = unknown;
+
+export function useApiWatchlistList<
+  TData = Awaited<ReturnType<typeof apiWatchlistList>>,
+  TError = unknown,
+>(options: {
+  query: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof apiWatchlistList>>, TError, TData>
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof apiWatchlistList>>,
+        TError,
+        TData
+      >,
+      "initialData"
+    >;
+}): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiWatchlistList<
+  TData = Awaited<ReturnType<typeof apiWatchlistList>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof apiWatchlistList>>, TError, TData>
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof apiWatchlistList>>,
+        TError,
+        TData
+      >,
+      "initialData"
+    >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiWatchlistList<
+  TData = Awaited<ReturnType<typeof apiWatchlistList>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof apiWatchlistList>>, TError, TData>
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiWatchlistList<
+  TData = Awaited<ReturnType<typeof apiWatchlistList>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof apiWatchlistList>>, TError, TData>
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiWatchlistListQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const apiWatchlistCreate = (
+  watchlist: NonReadonly<Watchlist>,
+  signal?: AbortSignal,
+) => {
+  return customAxios<Watchlist>({
+    url: `/api/watchlist/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: watchlist,
+    signal,
+  });
+};
+
+export const getApiWatchlistCreateMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiWatchlistCreate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: NonReadonly<Watchlist> },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["apiWatchlistCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiWatchlistCreate>>,
+    { data: NonReadonly<Watchlist> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return apiWatchlistCreate(data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { data: NonReadonly<Watchlist> },
+    TContext
+  >;
+};
+
+export type ApiWatchlistCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiWatchlistCreate>>
+>;
+export type ApiWatchlistCreateMutationBody = NonReadonly<Watchlist>;
+export type ApiWatchlistCreateMutationError = unknown;
+
+export const useApiWatchlistCreate = <
+  TData = Awaited<ReturnType<typeof apiWatchlistCreate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: NonReadonly<Watchlist> },
+    TContext
+  >;
+}): UseMutationResult<
+  TData,
+  TError,
+  { data: NonReadonly<Watchlist> },
+  TContext
+> => {
+  const mutationOptions = getApiWatchlistCreateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiWatchlistRetrieve = (id: string, signal?: AbortSignal) => {
+  return customAxios<Watchlist>({
+    url: `/api/watchlist/${id}/`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getApiWatchlistRetrieveQueryKey = (id: string) => {
+  return [`/api/watchlist/${id}/`] as const;
+};
+
+export const getApiWatchlistRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getApiWatchlistRetrieveQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiWatchlistRetrieve>>
+  > = ({ signal }) => apiWatchlistRetrieve(id, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiWatchlistRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiWatchlistRetrieve>>
+>;
+export type ApiWatchlistRetrieveQueryError = unknown;
+
+export function useApiWatchlistRetrieve<
+  TData = Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiWatchlistRetrieve<
+  TData = Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiWatchlistRetrieve<
+  TData = Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiWatchlistRetrieve<
+  TData = Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiWatchlistRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiWatchlistRetrieveQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const apiWatchlistUpdate = (
+  id: string,
+  watchlist: NonReadonly<Watchlist>,
+) => {
+  return customAxios<Watchlist>({
+    url: `/api/watchlist/${id}/`,
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    data: watchlist,
+  });
+};
+
+export const getApiWatchlistUpdateMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiWatchlistUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { id: string; data: NonReadonly<Watchlist> },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["apiWatchlistUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiWatchlistUpdate>>,
+    { id: string; data: NonReadonly<Watchlist> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return apiWatchlistUpdate(id, data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { id: string; data: NonReadonly<Watchlist> },
+    TContext
+  >;
+};
+
+export type ApiWatchlistUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiWatchlistUpdate>>
+>;
+export type ApiWatchlistUpdateMutationBody = NonReadonly<Watchlist>;
+export type ApiWatchlistUpdateMutationError = unknown;
+
+export const useApiWatchlistUpdate = <
+  TData = Awaited<ReturnType<typeof apiWatchlistUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { id: string; data: NonReadonly<Watchlist> },
+    TContext
+  >;
+}): UseMutationResult<
+  TData,
+  TError,
+  { id: string; data: NonReadonly<Watchlist> },
+  TContext
+> => {
+  const mutationOptions = getApiWatchlistUpdateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiWatchlistPartialUpdate = (
+  id: string,
+  patchedWatchlist: NonReadonly<PatchedWatchlist>,
+) => {
+  return customAxios<Watchlist>({
+    url: `/api/watchlist/${id}/`,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    data: patchedWatchlist,
+  });
+};
+
+export const getApiWatchlistPartialUpdateMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiWatchlistPartialUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { id: string; data: NonReadonly<PatchedWatchlist> },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["apiWatchlistPartialUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiWatchlistPartialUpdate>>,
+    { id: string; data: NonReadonly<PatchedWatchlist> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return apiWatchlistPartialUpdate(id, data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { id: string; data: NonReadonly<PatchedWatchlist> },
+    TContext
+  >;
+};
+
+export type ApiWatchlistPartialUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiWatchlistPartialUpdate>>
+>;
+export type ApiWatchlistPartialUpdateMutationBody =
+  NonReadonly<PatchedWatchlist>;
+export type ApiWatchlistPartialUpdateMutationError = unknown;
+
+export const useApiWatchlistPartialUpdate = <
+  TData = Awaited<ReturnType<typeof apiWatchlistPartialUpdate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { id: string; data: NonReadonly<PatchedWatchlist> },
+    TContext
+  >;
+}): UseMutationResult<
+  TData,
+  TError,
+  { id: string; data: NonReadonly<PatchedWatchlist> },
+  TContext
+> => {
+  const mutationOptions = getApiWatchlistPartialUpdateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiWatchlistDestroy = (id: string) => {
+  return customAxios<void>({ url: `/api/watchlist/${id}/`, method: "DELETE" });
+};
+
+export const getApiWatchlistDestroyMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiWatchlistDestroy>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}) => {
+  const mutationKey = ["apiWatchlistDestroy"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiWatchlistDestroy>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return apiWatchlistDestroy(id);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { id: string },
+    TContext
+  >;
+};
+
+export type ApiWatchlistDestroyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiWatchlistDestroy>>
+>;
+
+export type ApiWatchlistDestroyMutationError = unknown;
+
+export const useApiWatchlistDestroy = <
+  TData = Awaited<ReturnType<typeof apiWatchlistDestroy>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}): UseMutationResult<TData, TError, { id: string }, TContext> => {
+  const mutationOptions = getApiWatchlistDestroyMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+export const apiWatchlistIsInWatchlistCreate = (
+  isInWatchlist: IsInWatchlist,
+  signal?: AbortSignal,
+) => {
+  return customAxios<IsInWatchlistResponse>({
+    url: `/api/watchlist/is_in_watchlist/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: isInWatchlist,
+    signal,
+  });
+};
+
+export const getApiWatchlistIsInWatchlistCreateMutationOptions = <
+  TData = Awaited<ReturnType<typeof apiWatchlistIsInWatchlistCreate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: IsInWatchlist },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["apiWatchlistIsInWatchlistCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof apiWatchlistIsInWatchlistCreate>>,
+    { data: IsInWatchlist }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return apiWatchlistIsInWatchlistCreate(data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { data: IsInWatchlist },
+    TContext
+  >;
+};
+
+export type ApiWatchlistIsInWatchlistCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof apiWatchlistIsInWatchlistCreate>>
+>;
+export type ApiWatchlistIsInWatchlistCreateMutationBody = IsInWatchlist;
+export type ApiWatchlistIsInWatchlistCreateMutationError = unknown;
+
+export const useApiWatchlistIsInWatchlistCreate = <
+  TData = Awaited<ReturnType<typeof apiWatchlistIsInWatchlistCreate>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: IsInWatchlist },
+    TContext
+  >;
+}): UseMutationResult<TData, TError, { data: IsInWatchlist }, TContext> => {
+  const mutationOptions =
+    getApiWatchlistIsInWatchlistCreateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
