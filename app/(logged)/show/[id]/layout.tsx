@@ -1,54 +1,54 @@
 import { Metadata } from "next";
-import {
-  MediaTypeEnum,
-  MovieDetail,
-  TvDetail,
-} from "@/api/baseAppBackendAPI.schemas";
+import { MediaTypeEnum } from "@/api/baseAppBackendAPI.schemas";
 
-type Props = {
-  params: { id: string };
-  searchParams: { mediaType: MediaTypeEnum };
-};
-
+// Update the type definition to match Next.js expectations
 export async function generateMetadata({
   params,
   searchParams,
-}: Props): Promise<Metadata> {
-  // Fetch data
-  const mediaType = searchParams?.mediaType;
+}: {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}): Promise<Metadata> {
+  // Get mediaType from searchParams and validate it
+  const mediaType = searchParams.mediaType as MediaTypeEnum;
+
+  if (!mediaType || !Object.values(MediaTypeEnum).includes(mediaType)) {
+    return {
+      title: "Show Details",
+      description: "View show details",
+    };
+  }
+
   const endpoint =
     mediaType === MediaTypeEnum.movie
-      ? `/shows/movie/${params.id}`
-      : `/shows/tv/${params.id}`;
+      ? `/api/shows/movie/${params.id}`
+      : `/api/shows/tv/${params.id}`;
 
   try {
-    const data: MovieDetail | TvDetail = await fetch(
+    const data = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
     ).then((res) => res.json());
 
-    // @ts-ignore
-    const title = mediaType === MediaTypeEnum.movie ? data.title : data.name;
-
     return {
-      title: title,
+      title: data.title || data.name,
       description: data.overview,
       openGraph: {
-        title: title,
+        title: data.title || data.name,
         description: data.overview,
         images: [
           {
-            url: data.poster_path || "",
+            url: data.backdrop_path,
             width: 1200,
             height: 630,
-            alt: title,
+            alt: data.title || data.name,
           },
         ],
       },
       twitter: {
         card: "summary_large_image",
-        title: title,
+        title: data.title || data.name,
         description: data.overview,
-        images: [data.poster_path || ""],
+        images: [data.backdrop_path],
       },
     };
   } catch (e) {
