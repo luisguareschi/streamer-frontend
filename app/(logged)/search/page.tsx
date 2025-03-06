@@ -4,14 +4,19 @@ import {
   useApiShowsTrendingRetrieve,
 } from "@/api/api/api";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { VerticalShowCard } from "@/components/common/vertical-show-card";
 import { BarLoader } from "@/components/common/bar-loader";
 import { ApiShowsTrendingRetrieveTimeWindow } from "@/api/baseAppBackendAPI.schemas";
 import dayjs from "dayjs";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const SearchPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const { data: trendingShows, isLoading: isTrendingLoading } =
     useApiShowsTrendingRetrieve(
       { time_window: ApiShowsTrendingRetrieveTimeWindow.day },
@@ -26,6 +31,22 @@ const SearchPage = () => {
       { query: searchQuery },
       { query: { enabled: !!searchQuery } },
     );
+
+  const setSearchQuery = (query: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (query) {
+      params.set("search", query);
+    } else {
+      params.delete("search");
+    }
+    router.replace(`/search?${params.toString()}`);
+  };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [searchQuery]);
 
   const data = searchQuery ? searchResults : trendingShows;
   const isLoading = isTrendingLoading || isSearchLoading;
@@ -42,6 +63,7 @@ const SearchPage = () => {
           value={searchQuery}
           className="sm:w-[500px] sm:mx-auto"
           onChange={(e) => setSearchQuery(e.target.value)}
+          ref={inputRef}
         />
       </header>
       {!!data?.results.length && !isLoading && (
@@ -82,4 +104,12 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+const Wrapper = () => {
+  return (
+    <Suspense>
+      <SearchPage />
+    </Suspense>
+  );
+};
+
+export default Wrapper;
