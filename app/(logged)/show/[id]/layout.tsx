@@ -1,18 +1,25 @@
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 import { MediaTypeEnum } from "@/api/baseAppBackendAPI.schemas";
 
-// Update the type definition to match Next.js expectations
-export async function generateMetadata({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}): Promise<Metadata> {
-  // Get mediaType from searchParams and validate it
-  const mediaType = searchParams.mediaType as MediaTypeEnum;
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
-  if (!mediaType || !Object.values(MediaTypeEnum).includes(mediaType)) {
+// Update the type definition to match Next.js expectations
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const { id } = await params;
+  const { mediaType } = await searchParams;
+
+  // Get mediaType from searchParams and validate it
+
+  if (
+    !mediaType ||
+    !Object.values(MediaTypeEnum).includes(mediaType as MediaTypeEnum)
+  ) {
     return {
       title: "Show Details",
       description: "View show details",
@@ -21,8 +28,8 @@ export async function generateMetadata({
 
   const endpoint =
     mediaType === MediaTypeEnum.movie
-      ? `/api/shows/movie/${params.id}`
-      : `/api/shows/tv/${params.id}`;
+      ? `/api/shows/movie/${id}`
+      : `/api/shows/tv/${id}`;
 
   try {
     const data = await fetch(
