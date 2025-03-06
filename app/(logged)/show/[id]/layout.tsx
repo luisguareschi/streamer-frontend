@@ -2,8 +2,8 @@ import { Metadata, ResolvingMetadata } from "next";
 import { MediaTypeEnum } from "@/api/baseAppBackendAPI.schemas";
 
 type Props = {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 // Update the type definition to match Next.js expectations
@@ -11,8 +11,8 @@ export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { id } = await params;
-  const { mediaType } = await searchParams;
+  const id = params.id;
+  const mediaType = searchParams.mediaType;
 
   // Get mediaType from searchParams and validate it
 
