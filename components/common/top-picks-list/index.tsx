@@ -33,7 +33,7 @@ export const TopPicksList = ({ shows, isLoading }: TopPicksListProps) => {
             src={isMobile ? selectedShow?.imgUrl : selectedShow?.backdropUrl}
             alt={`${selectedShow?.mediaType} ${selectedShow?.id}`}
             className="w-full h-full object-cover blur-xl brightness-100 saturate-150 scale-150 z-10 
-            sm:blur-none sm:object-contain sm:relative sm:z-[1] sm:mt-20"
+            sm:blur-none sm:object-contain sm:relative sm:z-[1] sm:mt-36"
           />
           <img
             src={selectedShow?.backdropUrl}
