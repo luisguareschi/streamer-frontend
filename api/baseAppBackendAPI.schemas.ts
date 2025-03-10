@@ -7,6 +7,29 @@
  * API para el sistema de BaseApp Backend
  */
 
+export enum ApiWatchGetWatchUrlRetrieveMediaType {
+  movie = "movie",
+  tv = "tv",
+}
+export type ApiWatchGetWatchUrlRetrieveParams = {
+  /**
+   * Episode number
+   */
+  episode_number?: number;
+  /**
+   * Media type
+   */
+  media_type?: ApiWatchGetWatchUrlRetrieveMediaType;
+  /**
+   * Season number
+   */
+  season_number?: number;
+  /**
+   * TMDB ID
+   */
+  tmdb_id: number;
+};
+
 export enum ApiShowsTrendingRetrieveTimeWindow {
   day = "day",
   week = "week",
@@ -64,6 +87,38 @@ export interface Watchlist {
   readonly created_at: string;
   readonly updated_at: string;
   readonly user: number;
+}
+
+export interface WatchUrl {
+  readonly id: number;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   */
+  tmdb_id: number;
+  media_type: MediaTypeEnum;
+  /** @maxLength 255 */
+  url: string;
+  readonly created_at: string;
+  readonly updated_at: string;
+  /** @maxLength 255 */
+  poster_path: string;
+  /** @maxLength 255 */
+  backdrop_path: string;
+  /** @maxLength 255 */
+  title: string;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   * @nullable
+   */
+  season: number | null;
+  /**
+   * @minimum -9223372036854776000
+   * @maximum 9223372036854776000
+   * @nullable
+   */
+  episode: number | null;
 }
 
 export interface UserRegistration {
