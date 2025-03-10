@@ -4,7 +4,7 @@ import {
   useApiShowsTrendingRetrieve,
 } from "@/api/api/api";
 import { Input } from "@/components/ui/input";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { VerticalShowCard } from "@/components/common/vertical-show-card";
 import { BarLoader } from "@/components/common/bar-loader";
 import { ApiShowsTrendingRetrieveTimeWindow } from "@/api/baseAppBackendAPI.schemas";
@@ -16,6 +16,29 @@ const SearchPage = () => {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
   const inputRef = useRef<HTMLInputElement>(null);
+  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
+
+  // Debounce the URL update to prevent losing focus on every keystroke
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (localSearchQuery !== searchQuery) {
+        const params = new URLSearchParams(searchParams);
+        if (localSearchQuery) {
+          params.set("search", localSearchQuery);
+        } else {
+          params.delete("search");
+        }
+        router.replace(`/search?${params.toString()}`);
+      }
+    }, 250); // 250ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [localSearchQuery, router, searchParams, searchQuery]);
+
+  // Sync the URL search param with local state when it changes externally
+  useEffect(() => {
+    setLocalSearchQuery(searchQuery);
+  }, [searchQuery]);
 
   const { data: trendingShows, isLoading: isTrendingLoading } =
     useApiShowsTrendingRetrieve(
@@ -32,22 +55,6 @@ const SearchPage = () => {
       { query: { enabled: !!searchQuery } },
     );
 
-  const setSearchQuery = (query: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (query) {
-      params.set("search", query);
-    } else {
-      params.delete("search");
-    }
-    router.replace(`/search?${params.toString()}`);
-  };
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [searchQuery]);
-
   const data = searchQuery ? searchResults : trendingShows;
   const isLoading = isTrendingLoading || isSearchLoading;
 
@@ -58,12 +65,12 @@ const SearchPage = () => {
           Search for your favorite shows
         </h1>
         <Input
+          ref={inputRef}
           variant="neutral"
           placeholder="Search"
-          value={searchQuery}
+          value={localSearchQuery}
           className="sm:w-[500px] sm:mx-auto"
-          onChange={(e) => setSearchQuery(e.target.value)}
-          ref={inputRef}
+          onChange={(e) => setLocalSearchQuery(e.target.value)}
         />
       </header>
       {!!data?.results.length && !isLoading && (
