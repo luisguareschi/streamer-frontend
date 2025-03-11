@@ -119,6 +119,10 @@ export interface WatchUrl {
    * @nullable
    */
   episode: number | null;
+  /** @nullable */
+  readonly en_subtitle: string | null;
+  /** @nullable */
+  readonly es_subtitle: string | null;
 }
 
 export interface UserRegistration {

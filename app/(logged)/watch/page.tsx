@@ -14,7 +14,7 @@ import {
 } from "@/api/api/api";
 import FullScreenLoading from "@/components/common/full-screen-loading";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { Player, DefaultUi, Hls } from "@vime/react";
+import { Player, DefaultUi, Hls, Captions } from "@vime/react";
 import "@vime/core/themes/default.css";
 import { useSaveCurrentWatchProgress } from "@/hooks/useSaveCurrentWatchProgress";
 import { cn } from "@/lib/utils";
@@ -201,10 +201,30 @@ const WatchPage = () => {
           autoplay
           onVmCurrentTimeChange={(e) => setCurrentTime(e.detail)}
         >
-          <Hls version="latest" poster={watchUrl?.backdrop_path} crossOrigin="">
+          <Hls
+            version="latest"
+            poster={watchUrl?.backdrop_path}
+            crossOrigin="use-credentials"
+          >
             <source data-src={url} type="application/x-mpegURL" />
+            <track
+              id="en-subtitle"
+              src={watchUrl?.en_subtitle || ""}
+              label="English"
+              kind="subtitles"
+              srcLang="en"
+            />
+            <track
+              id="es-subtitle"
+              src={watchUrl?.es_subtitle || ""}
+              label="Spanish"
+              kind="subtitles"
+              srcLang="es"
+            />
           </Hls>
-          <DefaultUi />
+          <DefaultUi>
+            <Captions />
+          </DefaultUi>
         </Player>
       </div>
       {urlNotFound && (
