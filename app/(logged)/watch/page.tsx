@@ -13,11 +13,24 @@ import {
   useApiWatchGetWatchUrlRetrieve,
 } from "@/api/api/api";
 import FullScreenLoading from "@/components/common/full-screen-loading";
-import { Suspense, useEffect, useRef, useState } from "react";
-import { Player, DefaultUi, Hls, Captions } from "@vime/react";
-import "@vime/core/themes/default.css";
+import { Suspense, useEffect, useRef } from "react";
 import { useSaveCurrentWatchProgress } from "@/hooks/useSaveCurrentWatchProgress";
 import { cn } from "@/lib/utils";
+import "@vidstack/react/player/styles/default/theme.css";
+import "@vidstack/react/player/styles/default/layouts/video.css";
+import {
+  MediaPlayer,
+  MediaProvider,
+  Poster,
+  Captions,
+  Track,
+  MediaPlayerInstance,
+  useMediaStore,
+} from "@vidstack/react";
+import {
+  defaultLayoutIcons,
+  DefaultVideoLayout,
+} from "@vidstack/react/player/layouts/default";
 
 const WatchPage = () => {
   const router = useRouter();
@@ -26,8 +39,8 @@ const WatchPage = () => {
   const season = params.get("season");
   const episode = params.get("episode");
   const tmdbId = params.get("id");
-  const playerRef = useRef<HTMLVmPlayerElement>(null);
-  const [currentTime, setCurrentTime] = useState(0);
+  const playerRef = useRef<MediaPlayerInstance>(null);
+  const { currentTime, duration } = useMediaStore(playerRef);
 
   if (!tmdbId) {
     throw new Error("No ID");
@@ -134,29 +147,19 @@ const WatchPage = () => {
           return;
         }
         playerRef.current.currentTime = parseInt(startTime);
-        playerRef.current.play();
       };
-
-      const player = playerRef.current;
-      player.addEventListener("vmPlaybackReady", onPlayerReady);
-
-      return () => {
-        player.removeEventListener("vmPlaybackReady", onPlayerReady);
-      };
+      onPlayerReady();
     }
   }, [url, isLoading]);
 
   useSaveCurrentWatchProgress({
-    isLoading,
     tmdbId: parseInt(tmdbId),
     mediaType,
     season: season ? parseInt(season) : undefined,
     episode: episode ? parseInt(episode) : undefined,
     currentTime,
-    totalDuration: playerRef.current?.duration || -1,
+    totalDuration: duration,
     title: title || "",
-    poster_path: show?.poster_path || movie?.poster_path || "",
-    backdrop_path: show?.backdrop_path || movie?.backdrop_path || "",
     movie,
     show,
   });
@@ -196,36 +199,34 @@ const WatchPage = () => {
           urlNotFound && "hidden",
         )}
       >
-        <Player
-          ref={playerRef}
-          autoplay
-          onVmCurrentTimeChange={(e) => setCurrentTime(e.detail)}
-        >
-          <Hls
-            version="latest"
-            poster={watchUrl?.backdrop_path}
-            crossOrigin="use-credentials"
-          >
-            <source data-src={url} type="application/x-mpegURL" />
-            <track
-              id="en-subtitle"
-              src={watchUrl?.en_subtitle || ""}
-              label="English"
-              kind="subtitles"
-              srcLang="en"
+        <MediaPlayer title={header} src={url || ""} autoPlay ref={playerRef}>
+          <MediaProvider>
+            <Poster
+              className="vds-poster"
+              src={show?.backdrop_path || movie?.backdrop_path || ""}
+              alt={header}
             />
-            <track
-              id="es-subtitle"
-              src={watchUrl?.es_subtitle || ""}
-              label="Spanish"
-              kind="subtitles"
-              srcLang="es"
-            />
-          </Hls>
-          <DefaultUi>
-            <Captions />
-          </DefaultUi>
-        </Player>
+            {watchUrl?.en_subtitle && (
+              <Track
+                src={watchUrl?.en_subtitle}
+                kind="subtitles"
+                label="English"
+                language="en-US"
+                default
+              />
+            )}
+            {watchUrl?.es_subtitle && (
+              <Track
+                src={watchUrl?.es_subtitle}
+                kind="subtitles"
+                label="Spanish"
+                language="es-ES"
+              />
+            )}
+          </MediaProvider>
+          <Captions className="vds-captions" />
+          <DefaultVideoLayout icons={defaultLayoutIcons} />
+        </MediaPlayer>
       </div>
       {urlNotFound && (
         <div className="flex flex-col gap-2 justify-center items-center px-2">

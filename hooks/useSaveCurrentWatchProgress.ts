@@ -6,7 +6,7 @@ import {
 } from "@/api/baseAppBackendAPI.schemas";
 import { QUERYKEYS } from "@/queries/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
 interface SaveCurrentWatchProgressProps {
   tmdbId: number;
@@ -16,15 +16,11 @@ interface SaveCurrentWatchProgressProps {
   currentTime: number;
   totalDuration: number;
   title: string;
-  poster_path: string;
-  backdrop_path: string;
   movie?: MovieDetail;
   show?: TvDetail;
-  isLoading: boolean;
 }
 
 export const useSaveCurrentWatchProgress = ({
-  isLoading,
   tmdbId,
   mediaType,
   season,
@@ -39,35 +35,28 @@ export const useSaveCurrentWatchProgress = ({
   const { mutate: saveWatchProgress } = useApiShowWatchProgressCreate({
     mutation: {
       onSuccess: () => {
+        setLastSaveTime(Date.now());
         queryClient.invalidateQueries({
           queryKey: [QUERYKEYS.continueWatchingList],
         });
       },
     },
   });
-  const lastUpdateRef = useRef<number>(Date.now());
+  const [lastSaveTime, setLastSaveTime] = useState<number>(Date.now());
 
   useEffect(() => {
-    if (isLoading) {
+    if (!tmdbId || !mediaType || !title || !totalDuration) {
       return;
     }
-    if (!tmdbId || !mediaType || !title) {
-      return;
-    }
-
     if (mediaType === MediaTypeEnum.movie && !movie) {
       return;
     }
     if (mediaType === MediaTypeEnum.tv && !show) {
       return;
     }
-
-    const TIME_BETWEEN_UPDATES = 10000; // seconds in milliseconds
-    const now = Date.now();
-    if (now - lastUpdateRef.current < TIME_BETWEEN_UPDATES) {
+    if (Date.now() - lastSaveTime < 10000) {
       return;
     }
-    lastUpdateRef.current = now;
 
     saveWatchProgress({
       data: {
@@ -100,5 +89,5 @@ export const useSaveCurrentWatchProgress = ({
             : null,
       },
     });
-  }, [currentTime]);
+  }, [Date.now()]);
 };
