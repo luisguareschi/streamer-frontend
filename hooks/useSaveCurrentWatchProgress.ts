@@ -7,6 +7,7 @@ import {
 import { QUERYKEYS } from "@/queries/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { useTimer } from "./useTimer";
 
 interface SaveCurrentWatchProgressProps {
   tmdbId: number;
@@ -31,18 +32,17 @@ export const useSaveCurrentWatchProgress = ({
   movie,
   show,
 }: SaveCurrentWatchProgressProps) => {
+  const timer = useTimer({ timeBetweenUpdates: 10000 });
   const queryClient = useQueryClient();
   const { mutate: saveWatchProgress } = useApiShowWatchProgressCreate({
     mutation: {
       onSuccess: () => {
-        setLastSaveTime(Date.now());
         queryClient.invalidateQueries({
           queryKey: [QUERYKEYS.continueWatchingList],
         });
       },
     },
   });
-  const [lastSaveTime, setLastSaveTime] = useState<number>(Date.now());
 
   useEffect(() => {
     if (!tmdbId || !mediaType || !title || !totalDuration) {
@@ -52,9 +52,6 @@ export const useSaveCurrentWatchProgress = ({
       return;
     }
     if (mediaType === MediaTypeEnum.tv && !show) {
-      return;
-    }
-    if (Date.now() - lastSaveTime < 10000) {
       return;
     }
 
@@ -89,5 +86,5 @@ export const useSaveCurrentWatchProgress = ({
             : null,
       },
     });
-  }, [Date.now()]);
+  }, [timer]);
 };
