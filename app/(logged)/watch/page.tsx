@@ -199,7 +199,13 @@ const WatchPage = () => {
           urlNotFound && "hidden",
         )}
       >
-        <MediaPlayer title={header} src={url || ""} autoPlay ref={playerRef}>
+        <MediaPlayer
+          title={header}
+          src={url || ""}
+          autoPlay
+          ref={playerRef}
+          playsInline
+        >
           <MediaProvider>
             <Poster
               className="vds-poster"
