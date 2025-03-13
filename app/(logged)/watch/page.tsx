@@ -225,7 +225,7 @@ const WatchPage = () => {
             )}
           </MediaProvider>
           <Captions className="vds-captions" />
-          <DefaultVideoLayout icons={defaultLayoutIcons} />
+          <DefaultVideoLayout icons={defaultLayoutIcons} colorScheme="dark" />
         </MediaPlayer>
       </div>
       {urlNotFound && (
