@@ -26,6 +26,7 @@ import type {
   ApiShowsPopularRetrieveParams,
   ApiShowsSearchRetrieveParams,
   ApiShowsTrendingRetrieveParams,
+  ApiWatchGetWatchUrlRetrieveParams,
   ArchiveShow,
   EmailTokenObtain,
   IsInWatchlist,
@@ -41,6 +42,7 @@ import type {
   TvEpisodesResponse,
   User,
   UserRegistration,
+  WatchUrl,
   Watchlist,
 } from "../baseAppBackendAPI.schemas";
 import { customAxios } from "../../lib/axiosInstance";
@@ -3020,6 +3022,153 @@ export function useApiUsersMeRetrieve<
   >;
 }): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
   const queryOptions = getApiUsersMeRetrieveQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const apiWatchGetWatchUrlRetrieve = (
+  params: ApiWatchGetWatchUrlRetrieveParams,
+  signal?: AbortSignal,
+) => {
+  return customAxios<WatchUrl>({
+    url: `/api/watch/get_watch_url/`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getApiWatchGetWatchUrlRetrieveQueryKey = (
+  params: ApiWatchGetWatchUrlRetrieveParams,
+) => {
+  return [`/api/watch/get_watch_url/`, ...(params ? [params] : [])] as const;
+};
+
+export const getApiWatchGetWatchUrlRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiWatchGetWatchUrlRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getApiWatchGetWatchUrlRetrieveQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>
+  > = ({ signal }) => apiWatchGetWatchUrlRetrieve(params, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type ApiWatchGetWatchUrlRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>
+>;
+export type ApiWatchGetWatchUrlRetrieveQueryError = unknown;
+
+export function useApiWatchGetWatchUrlRetrieve<
+  TData = Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiWatchGetWatchUrlRetrieveParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useApiWatchGetWatchUrlRetrieve<
+  TData = Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiWatchGetWatchUrlRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useApiWatchGetWatchUrlRetrieve<
+  TData = Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiWatchGetWatchUrlRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+export function useApiWatchGetWatchUrlRetrieve<
+  TData = Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+  TError = unknown,
+>(
+  params: ApiWatchGetWatchUrlRetrieveParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof apiWatchGetWatchUrlRetrieve>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getApiWatchGetWatchUrlRetrieveQueryOptions(
+    params,
+    options,
+  );
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData>;

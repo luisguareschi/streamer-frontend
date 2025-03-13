@@ -1,20 +1,36 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import { MediaTypeEnum } from "@/api/baseAppBackendAPI.schemas";
+import {
+  ApiWatchGetWatchUrlRetrieveParams,
+  MediaTypeEnum,
+} from "@/api/baseAppBackendAPI.schemas";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import {
   useApiShowsMovieRetrieve,
   useApiShowsTvRetrieve,
-  useApiShowWatchProgressCreate,
   useApiShowWatchProgressProgressRetrieve,
+  useApiWatchGetWatchUrlRetrieve,
 } from "@/api/api/api";
 import FullScreenLoading from "@/components/common/full-screen-loading";
 import { Suspense, useEffect, useRef } from "react";
-import { usePlayerWatchProgress } from "@/hooks/usePlayerWatchProgress";
-
-// https://vidlink.pro/tv/{tmdbId}/{season}/{episode}
-// https://vidlink.pro/movie/{tmdbId}
+import { useSaveCurrentWatchProgress } from "@/hooks/useSaveCurrentWatchProgress";
+import { cn } from "@/lib/utils";
+import "@vidstack/react/player/styles/default/theme.css";
+import "@vidstack/react/player/styles/default/layouts/video.css";
+import {
+  MediaPlayer,
+  MediaProvider,
+  Poster,
+  Captions,
+  Track,
+  MediaPlayerInstance,
+  useMediaStore,
+} from "@vidstack/react";
+import {
+  defaultLayoutIcons,
+  DefaultVideoLayout,
+} from "@vidstack/react/player/layouts/default";
 
 const WatchPage = () => {
   const router = useRouter();
@@ -23,9 +39,8 @@ const WatchPage = () => {
   const season = params.get("season");
   const episode = params.get("episode");
   const tmdbId = params.get("id");
-  const { mutate: saveWatchProgress } = useApiShowWatchProgressCreate();
-  const { watchProgress } = usePlayerWatchProgress();
-  const lastUpdateRef = useRef<number>(0);
+  const playerRef = useRef<MediaPlayerInstance>(null);
+  const { currentTime, duration } = useMediaStore(playerRef);
 
   if (!tmdbId) {
     throw new Error("No ID");
@@ -41,6 +56,30 @@ const WatchPage = () => {
   if (mediaType === MediaTypeEnum.tv && !episode) {
     throw new Error("No episode");
   }
+
+  const {
+    data: watchUrl,
+    isLoading: isWatchUrlLoading,
+    isError: urlNotFound,
+  } = useApiWatchGetWatchUrlRetrieve(
+    {
+      tmdb_id: parseInt(tmdbId),
+      media_type:
+        mediaType as unknown as ApiWatchGetWatchUrlRetrieveParams["media_type"],
+      season_number: season ? parseInt(season) : undefined,
+      episode_number: episode ? parseInt(episode) : undefined,
+    },
+    {
+      query: {
+        retry: false,
+        throwOnError: false,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+      },
+    },
+  );
+
+  const url = watchUrl?.url;
 
   const { data: show, isLoading: isShowLoading } = useApiShowsTvRetrieve(
     tmdbId,
@@ -62,11 +101,16 @@ const WatchPage = () => {
     useApiShowWatchProgressProgressRetrieve(tmdbId, {
       query: {
         enabled: !!tmdbId,
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
       },
     });
 
   const isLoading =
-    isShowLoading || isMovieLoading || isShowWatchProgressLoading;
+    isShowLoading ||
+    isMovieLoading ||
+    isShowWatchProgressLoading ||
+    isWatchUrlLoading;
 
   const title = mediaType === MediaTypeEnum.movie ? movie?.title : show?.name;
   const header =
@@ -93,69 +137,32 @@ const WatchPage = () => {
     return startAt ? startAt.toFixed(0) : undefined;
   };
 
-  const url =
-    mediaType === MediaTypeEnum.movie
-      ? `https://vidlink.pro/movie/${tmdbId}?startAt=${getStartAtTime()}`
-      : `https://vidlink.pro/tv/${tmdbId}/${season}/${episode}?startAt=${getStartAtTime()}`;
-
+  // Set the start time and play the video
   useEffect(() => {
-    if (
-      watchProgress?.event !== "timeupdate" ||
-      !watchProgress.currentTime ||
-      !watchProgress.duration
-    ) {
-      return;
-    }
-    if (!tmdbId || !mediaType || !title) {
-      return;
-    }
+    if (playerRef.current && !isLoading) {
+      const startTime = getStartAtTime() || "0";
 
-    if (mediaType === MediaTypeEnum.movie && !movie) {
-      return;
+      const onPlayerReady = () => {
+        if (!playerRef.current) {
+          return;
+        }
+        playerRef.current.currentTime = parseInt(startTime);
+      };
+      onPlayerReady();
     }
-    if (mediaType === MediaTypeEnum.tv && !show) {
-      return;
-    }
+  }, [url, isLoading]);
 
-    const TIME_BETWEEN_UPDATES = 30000; // seconds in milliseconds
-    const now = Date.now();
-    if (now - lastUpdateRef.current < TIME_BETWEEN_UPDATES) {
-      return;
-    }
-    lastUpdateRef.current = now;
-
-    saveWatchProgress({
-      data: {
-        media_type: mediaType,
-        tmdb_id: parseInt(tmdbId),
-        poster_path: show?.poster_path || movie?.poster_path || "",
-        backdrop_path: show?.backdrop_path || movie?.backdrop_path || "",
-        title: title,
-        tv_progress:
-          mediaType === MediaTypeEnum.tv
-            ? [
-                {
-                  id: 0,
-                  season: parseInt(season || "-1"),
-                  episode: parseInt(episode || "-1"),
-                  watched_seconds: watchProgress.currentTime,
-                  total_seconds: watchProgress.duration,
-                },
-              ]
-            : null,
-        movie_progress:
-          mediaType === MediaTypeEnum.movie
-            ? [
-                {
-                  id: 0,
-                  watched_seconds: watchProgress.currentTime,
-                  total_seconds: watchProgress.duration,
-                },
-              ]
-            : null,
-      },
-    });
-  }, [watchProgress]);
+  useSaveCurrentWatchProgress({
+    tmdbId: parseInt(tmdbId),
+    mediaType,
+    season: season ? parseInt(season) : undefined,
+    episode: episode ? parseInt(episode) : undefined,
+    currentTime,
+    totalDuration: duration,
+    title: title || "",
+    movie,
+    show,
+  });
 
   if (isLoading) {
     return <FullScreenLoading />;
@@ -186,13 +193,57 @@ const WatchPage = () => {
           {header}
         </h1>
       </div>
-      <iframe
-        src={url}
-        allowFullScreen
-        className="w-full aspect-video lg:w-2/3 lg:border-2 lg:border-gray-800 lg:rounded-lg"
-        referrerPolicy="no-referrer"
-        allow="autoplay; encrypted-media"
-      />
+      <div
+        className={cn(
+          "w-full aspect-video lg:w-2/3 lg:border-2 lg:border-gray-800 lg:rounded-lg",
+          urlNotFound && "hidden",
+        )}
+      >
+        <MediaPlayer
+          title={header}
+          src={url || ""}
+          autoPlay
+          ref={playerRef}
+          playsInline
+        >
+          <MediaProvider>
+            <Poster
+              className="vds-poster"
+              src={show?.backdrop_path || movie?.backdrop_path || ""}
+              alt={header}
+            />
+            {watchUrl?.en_subtitle && (
+              <Track
+                src={watchUrl?.en_subtitle}
+                kind="subtitles"
+                label="English"
+                language="en-US"
+                default
+              />
+            )}
+            {watchUrl?.es_subtitle && (
+              <Track
+                src={watchUrl?.es_subtitle}
+                kind="subtitles"
+                label="Spanish"
+                language="es-ES"
+              />
+            )}
+          </MediaProvider>
+          <Captions className="vds-captions" />
+          <DefaultVideoLayout icons={defaultLayoutIcons} colorScheme="dark" />
+        </MediaPlayer>
+      </div>
+      {urlNotFound && (
+        <div className="flex flex-col gap-2 justify-center items-center px-2">
+          <h1 className="text-white font-semibold text-center text-lg">
+            Oops! We couldn&apos;t find the video you&apos;re looking for.
+          </h1>
+          <p className="text-neutral-300 flex flex-col items-center gap-2 text-center">
+            We try to host all the videos, but sometimes it doesn&apos;t work.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
