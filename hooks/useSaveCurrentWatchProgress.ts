@@ -14,8 +14,8 @@ interface SaveCurrentWatchProgressProps {
   mediaType: MediaTypeEnum;
   season?: number;
   episode?: number;
-  currentTime: number;
-  totalDuration: number;
+  currentTime?: number;
+  totalDuration?: number;
   title: string;
   movie?: MovieDetail;
   show?: TvDetail;
@@ -45,7 +45,7 @@ export const useSaveCurrentWatchProgress = ({
   });
 
   useEffect(() => {
-    if (!tmdbId || !mediaType || !title || !totalDuration) {
+    if (!tmdbId || !mediaType || !title || !totalDuration || !currentTime) {
       return;
     }
     if (mediaType === MediaTypeEnum.movie && !movie) {

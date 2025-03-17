@@ -15,9 +15,10 @@ export const AdblockBanner = ({ show = true }: AdblockBannerProps) => {
   const { isIOS, isAndroid } = usePlatform();
   const hasAdBlock1 = useDetectAdBlock();
 
-  const adGuardLink =
+  const adGuardIOSLink =
     "https://apps.apple.com/us/app/adguard-adblock-privacy/id1047223162";
-  const adBlockPlusLink = "https://adblockplus.org/";
+  const adGuardWebLink =
+    "https://chromewebstore.google.com/detail/adguard-adblocker";
 
   useEffect(() => {
     if (!startDetection) return;
@@ -39,7 +40,7 @@ export const AdblockBanner = ({ show = true }: AdblockBannerProps) => {
         </p>
         {isIOS && (
           <Link
-            href={adGuardLink}
+            href={adGuardIOSLink}
             target="_blank"
             className="flex items-center gap-2 mt-2 text-blue-500"
           >
@@ -49,12 +50,12 @@ export const AdblockBanner = ({ show = true }: AdblockBannerProps) => {
         )}
         {!isIOS && !isAndroid && (
           <Link
-            href={adBlockPlusLink}
+            href={adGuardWebLink}
             target="_blank"
             className="flex items-center gap-2 mt-2 text-blue-500"
           >
             <LinkIcon className="size-4 min-w-4 min-h-4" />
-            Install AdBlockPlus
+            Install AdGuard for web
           </Link>
         )}
       </div>

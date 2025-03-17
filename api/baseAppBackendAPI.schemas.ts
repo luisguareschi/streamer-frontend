@@ -97,7 +97,6 @@ export interface WatchUrl {
    */
   tmdb_id: number;
   media_type: MediaTypeEnum;
-  /** @maxLength 255 */
   url: string;
   readonly created_at: string;
   readonly updated_at: string;
@@ -119,10 +118,8 @@ export interface WatchUrl {
    * @nullable
    */
   episode: number | null;
-  /** @nullable */
-  readonly en_subtitle: string | null;
-  /** @nullable */
-  readonly es_subtitle: string | null;
+  readonly en_subtitle: string;
+  readonly es_subtitle: string;
 }
 
 export interface UserRegistration {
