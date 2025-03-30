@@ -172,11 +172,6 @@ export const EpisodeDrawer = ({ tv, movie }: EpisodeDrawerProps) => {
             </SelectContent>
           </Select>
         )}
-        {movie && (
-          <Button variant="roundedWhite" className="w-full" size="xl">
-            Click below to watch
-          </Button>
-        )}
         <EpisodeList episodes={episodesList()} isLoading={isLoadingEpisodes} />
       </DrawerContent>
     </Drawer>
