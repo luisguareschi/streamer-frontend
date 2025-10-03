@@ -9,36 +9,9 @@ import { VerticalShowCard } from "@/components/common/vertical-show-card";
 import { BarLoader } from "@/components/common/bar-loader";
 import { ApiShowsTrendingRetrieveTimeWindow } from "@/api/baseAppBackendAPI.schemas";
 import dayjs from "dayjs";
-import { useRouter, useSearchParams } from "next/navigation";
 
 const SearchPage = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const searchQuery = searchParams.get("search") || "";
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
-
-  // Debounce the URL update to prevent losing focus on every keystroke
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (localSearchQuery !== searchQuery) {
-        const params = new URLSearchParams(searchParams);
-        if (localSearchQuery) {
-          params.set("search", localSearchQuery);
-        } else {
-          params.delete("search");
-        }
-        router.replace(`/search?${params.toString()}`);
-      }
-    }, 250); // 250ms debounce
-
-    return () => clearTimeout(timeoutId);
-  }, [localSearchQuery, router, searchParams, searchQuery]);
-
-  // Sync the URL search param with local state when it changes externally
-  useEffect(() => {
-    setLocalSearchQuery(searchQuery);
-  }, [searchQuery]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data: trendingShows, isLoading: isTrendingLoading } =
     useApiShowsTrendingRetrieve(
@@ -65,12 +38,11 @@ const SearchPage = () => {
           Search for your favorite shows
         </h1>
         <Input
-          ref={inputRef}
           variant="neutral"
           placeholder="Search"
-          value={localSearchQuery}
+          value={searchQuery}
           className="sm:w-[500px] sm:mx-auto"
-          onChange={(e) => setLocalSearchQuery(e.target.value)}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
       </header>
       {!!data?.results.length && !isLoading && (
